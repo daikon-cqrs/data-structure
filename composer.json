@@ -1,5 +1,5 @@
 {
-    "name": "accordia/cqrs",
+    "name": "accordia/data-structures",
     "type": "library",
     "description": "Generic data-structure traits based on php/ds.",
     "keywords": [ "list", "map", "data-structures" ],
