@@ -6,7 +6,6 @@
     "homepage": "https://github.com/accordia/data-structures",
     "license": "MPL-2.0",
     "prefer-stable": true,
-    "minimum-stability": "dev",
     "require": {
         "php": ">=7.1",
         "php-ds/php-ds": "^1.1"
@@ -17,10 +16,10 @@
         "satooshi/php-coveralls": "master@dev"
     },
     "autoload": {
-        "psr-4": { "Accordia\\DataStructures\\" : "src" }
+        "psr-4": { "Daikon\\DataStructures\\" : "src" }
     },
     "autoload-dev": {
-        "psr-4": { "Accordia\\Tests\\DataStructures\\": "tests" }
+        "psr-4": { "Daikon\\Tests\\DataStructures\\": "tests" }
     },
     "scripts": {
         "build": [
