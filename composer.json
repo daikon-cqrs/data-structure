@@ -1,9 +1,9 @@
 {
-    "name": "accordia/data-structures",
+    "name": "daikon/data-structures",
     "type": "library",
     "description": "Generic data-structure traits based on php/ds.",
     "keywords": [ "list", "map", "data-structures" ],
-    "homepage": "https://github.com/accordia/data-structures",
+    "homepage": "https://github.com/daikon-cqrs/data-structures",
     "license": "MPL-2.0",
     "prefer-stable": true,
     "require": {
