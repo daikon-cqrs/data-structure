@@ -19,6 +19,14 @@ trait TypedMapTrait
     {
         return $this->compositeMap->get($key);
     }
+    
+    public function set($key, $item): self
+    {
+        $this->assertItemType($item);
+        $copy = clone $this;
+        $copy->compositeMap->put($key, $item);
+        return $copy;
+    }
 
     public function count(): int
     {
