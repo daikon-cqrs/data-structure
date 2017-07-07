@@ -4,4 +4,4 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/daikon-cqrs/data-structures/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/data-structures/?branch=master)
 [![Code Quality](https://scrutinizer-ci.com/g/daikon-cqrs/data-structures/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/data-structures/?branch=master)
 
-Generic data-structures for php.
+Immutable data-structure traits based on php/ds.
