@@ -1,5 +1,5 @@
 {
-    "name": "daikon/data-structures",
+    "name": "daikon/data-structure",
     "type": "library",
     "description": "Immutable data-structure traits based on php/ds.",
     "keywords": [ "list", "map", "data-structures", "immutable" ],
@@ -16,10 +16,10 @@
         "squizlabs/php_codesniffer": "^3.0"
     },
     "autoload": {
-        "psr-4": { "Daikon\\DataStructures\\" : "src" }
+        "psr-4": { "Daikon\\DataStructure\\" : "src" }
     },
     "autoload-dev": {
-        "psr-4": { "Daikon\\Tests\\DataStructures\\": "tests" }
+        "psr-4": { "Daikon\\Tests\\DataStructure\\": "tests" }
     },
     "scripts": {
         "build": [

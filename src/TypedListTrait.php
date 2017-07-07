@@ -1,6 +1,6 @@
 <?php
 
-namespace Daikon\DataStructures;
+namespace Daikon\DataStructure;
 
 use Ds\Vector;
 

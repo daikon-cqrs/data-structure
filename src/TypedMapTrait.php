@@ -1,6 +1,6 @@
 <?php
 
-namespace Daikon\DataStructures;
+namespace Daikon\DataStructure;
 
 use Ds\Map;
 
@@ -19,7 +19,7 @@ trait TypedMapTrait
     {
         return $this->compositeMap->get($key);
     }
-    
+
     public function set($key, $item): self
     {
         $this->assertItemType($item);
