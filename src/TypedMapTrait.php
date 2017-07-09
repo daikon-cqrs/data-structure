@@ -58,7 +58,7 @@ trait TypedMapTrait
         return $this->get($key);
     }
 
-    private function init(array $items, string $itemFqcn)
+    private function init(iterable $items, string $itemFqcn)
     {
         $this->itemFqcn = $itemFqcn;
         foreach ($items as $key => $item) {

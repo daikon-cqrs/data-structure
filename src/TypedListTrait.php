@@ -76,7 +76,7 @@ trait TypedListTrait
         return $this->itemFqcn;
     }
 
-    private function init(array $items, string $itemFqcn)
+    private function init(iterable $items, string $itemFqcn)
     {
         $this->itemFqcn = $itemFqcn;
         foreach ($items as $index => $item) {
@@ -90,7 +90,7 @@ trait TypedListTrait
     {
         if (!is_int($index)) {
             throw new \Exception(sprintf(
-                'Invalid item-key given to %s. Expected int but was given %s',
+                'Invalid item key given to %s. Expected int but was given %s',
                 static::CLASS,
                 is_object($index) ? get_class($index) : @gettype($index)
             ));
@@ -101,7 +101,7 @@ trait TypedListTrait
     {
         if (!is_a($item, $this->itemFqcn)) {
             throw new \Exception(sprintf(
-                'Invalid item-type given to %s. Expected %s but was given %s',
+                'Invalid item type given to %s. Expected %s but was given %s',
                 static::CLASS,
                 $this->itemFqcn,
                 is_object($item) ? get_class($item) : @gettype($item)
