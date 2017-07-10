@@ -36,6 +36,13 @@ trait TypedListTrait
         return $copy;
     }
 
+    public function reverse(): self
+    {
+        $copy = clone $this;
+        $copy->compositeVector->reverse();
+        return $copy;
+    }
+
     public function count(): int
     {
         return $this->compositeVector->count();
