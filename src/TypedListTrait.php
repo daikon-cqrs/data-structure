@@ -35,7 +35,6 @@ trait TypedListTrait
         $copy->compositeVector->unshift([ $item ]);
         return $copy;
     }
-unshift
 
     public function remove($item): self
     {
