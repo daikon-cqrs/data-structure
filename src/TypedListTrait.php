@@ -27,6 +27,15 @@ trait TypedListTrait
         $copy->compositeVector->push($item);
         return $copy;
     }
+    
+    public function prepend($item): self
+    {
+        $this->assertItemType($item);
+        $copy = clone $this;
+        $copy->compositeVector->unshift([ $item ]);
+        return $copy;
+    }
+unshift
 
     public function remove($item): self
     {
