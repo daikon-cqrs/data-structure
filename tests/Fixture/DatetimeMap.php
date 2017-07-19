@@ -12,7 +12,7 @@ namespace Daikon\Tests\DataStructure\Fixture;
 use Daikon\DataStructure\TypedMapTrait;
 use DateTimeInterface;
 
-final class DatetimeMap
+final class DatetimeMap implements \IteratorAggregate, \Countable
 {
     use TypedMapTrait;
 

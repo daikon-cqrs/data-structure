@@ -15,7 +15,7 @@
          syntaxCheck="true"
          strict="false"
          verbose="false"
-         bootstrap="tests/bootstrap.php">
+         ><!-- bootstrap="vendor/autoload.php"> -->
     <testsuites>
         <testsuite name="main">
             <directory>tests</directory>
@@ -25,11 +25,6 @@
         <whitelist>
             <directory suffix=".php">src</directory>
             <directory suffix=".php">tests</directory>
-<!--
-            <exclude>
-                <directory>tests/Fixture</directory>
-            </exclude>
--->
         </whitelist>
     </filter>
     <logging>

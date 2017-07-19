@@ -51,7 +51,7 @@ final class TypedListTraitTest extends TestCase
             'Expected int but was given string.'
         );
         $list = new DatetimeList([ 'a' => $d0 ]);
-    }
+    } // @codeCoverageIgnore
 
     public function testGetItemFqcnWorks()
     {
@@ -104,7 +104,7 @@ final class TypedListTraitTest extends TestCase
         $this->expectException(OutOfRangeException::CLASS);
         $this->expectExceptionCode(0);
         $map->get(1);
-    }
+    } // @codeCoverageIgnore
 
     public function testPushWorks()
     {
@@ -129,7 +129,7 @@ final class TypedListTraitTest extends TestCase
             'Expected DateTimeInterface but was given stdClass.'
         );
         $list = $list->push($d1);
-    }
+    } // @codeCoverageIgnore
 
     public function testPrependWorks()
     {
@@ -156,7 +156,7 @@ final class TypedListTraitTest extends TestCase
             'Expected DateTimeInterface but was given stdClass.'
         );
         $list = $list->prepend($d1);
-    }
+    } // @codeCoverageIgnore
 
     public function testReverseWorks()
     {
@@ -201,7 +201,7 @@ final class TypedListTraitTest extends TestCase
             'Expected DateTimeInterface but was given stdClass.'
         );
         $list = $list->remove(new \stdClass);
-    }
+    } // @codeCoverageIgnore
 
     public function testGetFirstWorks()
     {

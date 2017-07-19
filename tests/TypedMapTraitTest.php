@@ -49,7 +49,7 @@ final class TypedMapTraitTest extends TestCase
             'Expected string but was given integer.'
         );
         $map = new DatetimeMap([ '1337' => new DateTime ]);
-    }
+    } // @codeCoverageIgnore
 
     public function testConstructFailsOnInvalidIndex()
     {
@@ -61,7 +61,7 @@ final class TypedMapTraitTest extends TestCase
             'Expected string but was given integer.'
         );
         $map = new DatetimeMap([ 123 => $d0 ]);
-    }
+    } // @codeCoverageIgnore
 
     public function testGetItemFqcnWorks()
     {
@@ -111,7 +111,7 @@ final class TypedMapTraitTest extends TestCase
         $this->expectException(OutOfBoundsException::CLASS);
         $this->expectExceptionCode(0);
         $map->get('non-existant');
-    }
+    } // @codeCoverageIgnore
 
     public function testGetThrowsForInternalProperties()
     {
@@ -119,7 +119,7 @@ final class TypedMapTraitTest extends TestCase
         $this->expectException(OutOfBoundsException::CLASS);
         $this->expectExceptionCode(0);
         $map->itemFqcn;
-    }
+    } // @codeCoverageIgnore
 
     public function testImplicitGetWorks()
     {
@@ -138,15 +138,6 @@ final class TypedMapTraitTest extends TestCase
         $this->assertTrue($d1 === $map->$key);
     }
 
-    /*
-    public function testImplicitGetFailsForPrivateProperties()
-    {
-        $d1 = new DateTime;
-        $key = 'itemFqcn';
-        $map = new DatetimeMap([ $key => $d1 ]);
-        $this->assertNotEquals($d1 === $map->$key);
-    }
-     */
     public function testSetWorks()
     {
         $d0 = new DateTime;
@@ -170,7 +161,7 @@ final class TypedMapTraitTest extends TestCase
             'Expected DateTimeInterface but was given stdClass.'
         );
         $map = $map->set('b', $d1);
-    }
+    } // @codeCoverageIgnore
 
     public function testToArrayWorks()
     {
