@@ -15,6 +15,7 @@
     "support": {
         "issues": "https://github.com/daikon-cqrs/data-structure/issues"
     },
+    "minimum-stability": "dev",
     "require": {
         "php": ">=7.1",
         "php-ds/php-ds": "^1.1"
@@ -49,7 +50,6 @@
         "test": "phpunit --no-coverage",
         "tests": "phpunit",
         "sniff": [
-            "@code-sniffer-autofix",
             "@code-sniffer",
             "@copy-paste-detector",
             "@validate-json",
