@@ -10,14 +10,14 @@ use Iterator;
 trait TypedMapTrait
 {
     /**
-     * @var Ds\Map internal map to store items
+     * @var Map internal map to store items
      */
     private $compositeMap;
 
     /**
-     * @var string fully qualified class name of acceptable types
+     * @var string[] fully qualified class name of acceptable types
      */
-    private $itemFqcn;
+    private $itemFqcns;
 
     public function has(string $key): bool
     {
@@ -25,7 +25,7 @@ trait TypedMapTrait
     }
 
     /**
-     * @throws OutOfBoundsException
+     * @throws \OutOfBoundsException
      */
     public function get(string $key)
     {
@@ -63,22 +63,22 @@ trait TypedMapTrait
         return $this->compositeMap->getIterator();
     }
 
-    public function getItemFqcn(): string
+    public function getItemFqcn(): array
     {
-        return $this->itemFqcn;
+        return $this->itemFqcns;
     }
 
     /**
-     * @throws OutOfBoundsException
+     * @throws \OutOfBoundsException
      */
     public function __get(string $key)
     {
         return $this->get($key);
     }
 
-    private function init(iterable $items, string $itemFqcn): void
+    private function init(iterable $items, $itemFqcns): void
     {
-        $this->itemFqcn = $itemFqcn;
+        $this->itemFqcns = (array)$itemFqcns;
         foreach ($items as $key => $item) {
             $this->assertItemKey($key);
             $this->assertItemType($item);
@@ -99,13 +99,15 @@ trait TypedMapTrait
 
     private function assertItemType($item): void
     {
-        if (!is_a($item, $this->itemFqcn)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid item type given to %s. Expected %s but was given %s.',
-                static::CLASS,
-                $this->itemFqcn,
-                is_object($item) ? get_class($item) : @gettype($item)
-            ));
+        foreach ($this->itemFqcns as $fqcn) {
+            if (!is_a($item, $fqcn)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid item type given to %s. Expected %s but was given %s.',
+                    static::CLASS,
+                    $fqcn,
+                    is_object($item) ? get_class($item) : @gettype($item)
+                ));
+            }
         }
     }
 

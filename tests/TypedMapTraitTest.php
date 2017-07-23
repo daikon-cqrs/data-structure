@@ -22,19 +22,19 @@ final class TypedMapTraitTest extends TestCase
 {
     public function testConstructNoParamsWorks()
     {
-        $this->assertInstanceOf(DatetimeMap::CLASS, new DatetimeMap);
+        $this->assertInstanceOf(DatetimeMap::class, new DatetimeMap);
     }
 
     public function testConstructWithParamsWorks()
     {
         $map = new DatetimeMap([ 'now' => new DateTime, 'nower' => new DateTimeImmutable ]);
-        $this->assertInstanceOf(DatetimeMap::CLASS, $map);
+        $this->assertInstanceOf(DatetimeMap::class, $map);
     }
 
     public function testConstructWithIndexedParamsWorks()
     {
         $map = new DatetimeMap([ 'a1337' => new DateTime, 'yes' => new DateTimeImmutable ]);
-        $this->assertInstanceOf(DatetimeMap::CLASS, $map);
+        $this->assertInstanceOf(DatetimeMap::class, $map);
         $this->assertEquals(2, $map->count());
         $this->assertTrue($map->has('yes'));
         $this->assertTrue($map->has('a1337'));
@@ -42,30 +42,30 @@ final class TypedMapTraitTest extends TestCase
 
     public function testConstructWithIntegerStringAsKeyThrowsBecausePhp()
     {
-        $this->expectException(InvalidArgumentException::CLASS);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
             'Invalid item key given to Daikon\Tests\DataStructure\Fixture\DatetimeMap. '.
             'Expected string but was given integer.'
         );
-        $map = new DatetimeMap([ '1337' => new DateTime ]);
+        new DatetimeMap([ '1337' => new DateTime ]);
     } // @codeCoverageIgnore
 
     public function testConstructFailsOnInvalidIndex()
     {
         $d0 = new DateTime;
-        $this->expectException(InvalidArgumentException::CLASS);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
             'Invalid item key given to Daikon\Tests\DataStructure\Fixture\DatetimeMap. '.
             'Expected string but was given integer.'
         );
-        $map = new DatetimeMap([ 123 => $d0 ]);
+        new DatetimeMap([ 123 => $d0 ]);
     } // @codeCoverageIgnore
 
     public function testGetItemFqcnWorks()
     {
-        $this->assertEquals(DateTimeInterface::CLASS, (new DatetimeMap)->getItemFqcn());
+        $this->assertEquals([DateTimeInterface::class], (new DatetimeMap)->getItemFqcn());
     }
 
     public function testCountWorks()
@@ -94,7 +94,7 @@ final class TypedMapTraitTest extends TestCase
     public function testGetIteratorWorks()
     {
         $map = new DatetimeMap([ 'a' => new DateTime, 'b' => new DateTimeImmutable]);
-        $this->assertInstanceOf(\Iterator::CLASS, $map->getIterator());
+        $this->assertInstanceOf(\Iterator::class, $map->getIterator());
     }
 
     public function testGetWorks()
@@ -108,7 +108,7 @@ final class TypedMapTraitTest extends TestCase
     public function testGetThrowsForNonExistantKey()
     {
         $map = new DatetimeMap([ 'a' => new Datetime ]);
-        $this->expectException(OutOfBoundsException::CLASS);
+        $this->expectException(OutOfBoundsException::class);
         $this->expectExceptionCode(0);
         $map->get('non-existant');
     } // @codeCoverageIgnore
@@ -116,9 +116,9 @@ final class TypedMapTraitTest extends TestCase
     public function testGetThrowsForInternalProperties()
     {
         $map = new DatetimeMap([ 'a' => new Datetime ]);
-        $this->expectException(OutOfBoundsException::CLASS);
+        $this->expectException(OutOfBoundsException::class);
         $this->expectExceptionCode(0);
-        $map->itemFqcn;
+        $map->itemFqcns;
     } // @codeCoverageIgnore
 
     public function testImplicitGetWorks()
@@ -154,13 +154,13 @@ final class TypedMapTraitTest extends TestCase
         $d0 = new DateTime;
         $d1 = new \stdClass;
         $map = new DatetimeMap([ 'a' => $d0 ]);
-        $this->expectException(InvalidArgumentException::CLASS);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
             'Invalid item type given to Daikon\Tests\DataStructure\Fixture\DatetimeMap. '.
             'Expected DateTimeInterface but was given stdClass.'
         );
-        $map = $map->set('b', $d1);
+        $map->set('b', $d1);
     } // @codeCoverageIgnore
 
     public function testToArrayWorks()
