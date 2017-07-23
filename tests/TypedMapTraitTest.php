@@ -158,7 +158,7 @@ final class TypedMapTraitTest extends TestCase
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
             'Invalid item type given to Daikon\Tests\DataStructure\Fixture\DatetimeMap. '.
-            'Expected DateTimeInterface but was given stdClass.'
+            'Expected one of DateTimeInterface but was given stdClass.'
         );
         $map->set('b', $d1);
     } // @codeCoverageIgnore

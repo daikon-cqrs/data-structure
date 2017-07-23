@@ -99,15 +99,20 @@ trait TypedMapTrait
 
     private function assertItemType($item): void
     {
+        $itemIsValid = false;
         foreach ($this->itemFqcns as $fqcn) {
-            if (!is_a($item, $fqcn)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Invalid item type given to %s. Expected %s but was given %s.',
-                    static::CLASS,
-                    $fqcn,
-                    is_object($item) ? get_class($item) : @gettype($item)
-                ));
+            if (is_a($item, $fqcn)) {
+                $itemIsValid = true;
+                break;
             }
+        }
+        if (!$itemIsValid) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid item type given to %s. Expected one of %s but was given %s.',
+                static::class,
+                implode(', ', $this->itemFqcns),
+                is_object($item) ? get_class($item) : @gettype($item)
+            ));
         }
     }
 
