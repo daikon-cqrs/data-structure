@@ -101,7 +101,7 @@ trait TypedListTrait
         return $this->compositeVector->last();
     }
 
-    public function toArray(): array
+    public function toNative(): array
     {
         return $this->compositeVector->toArray();
     }

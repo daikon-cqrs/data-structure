@@ -163,13 +163,13 @@ final class TypedMapTraitTest extends TestCase
         $map->set('b', $d1);
     } // @codeCoverageIgnore
 
-    public function testToArrayWorks()
+    public function testToNativeWorks()
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
         $a = [ 'a' => $d0, 'b' => $d1 ];
         $map = new DatetimeMap($a);
-        $b = $map->toArray();
+        $b = $map->toNative();
         $this->assertTrue($a === $b);
         $this->assertTrue($a['a'] === $b['a']);
         $this->assertTrue($a['b'] === $b['b']);

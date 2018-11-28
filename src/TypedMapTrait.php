@@ -48,7 +48,7 @@ trait TypedMapTrait
         return count($this->compositeMap);
     }
 
-    public function toArray(): array
+    public function toNative(): array
     {
         return $this->compositeMap->toArray();
     }
