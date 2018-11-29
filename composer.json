@@ -6,15 +6,6 @@
     "homepage": "https://github.com/daikon-cqrs/data-structures",
     "license": "MPL-2.0",
     "prefer-stable": true,
-    "authors": [
-        {
-            "name": "Contributors",
-            "homepage": "https://github.com/daikon-cqrs/data-structure/graphs/contributors"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/daikon-cqrs/data-structure/issues"
-    },
     "minimum-stability": "dev",
     "require": {
         "php": "^7.2",
