@@ -10,7 +10,7 @@ use Iterator;
 trait TypedListTrait
 {
     /**
-     * @var Ds\Vector internal vector to store items
+     * @var Vector internal vector to store items
      */
     private $compositeVector;
 
