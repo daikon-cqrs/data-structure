@@ -9,14 +9,10 @@ use Iterator;
 
 trait TypedListTrait
 {
-    /**
-     * @var Vector internal vector to store items
-     */
+    /** @var Vector */
     private $compositeVector;
 
-    /**
-     * @var string fully qualified class name of acceptable types
-     */
+    /** @var string fully qualified class name of acceptable types */
     private $itemFqcn;
 
     public function has(int $index): bool
