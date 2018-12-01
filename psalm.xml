@@ -9,11 +9,9 @@
      */
 -->
 <psalm
-    name="Psalm config used for daikon-cqrs/config"
-    stopOnFirstError="false"
+    name="Psalm config used for daikon-cqrs libs"
     useDocblockTypes="true"
     totallyTyped="false"
-    usePropertyDefaultForType="false"
     allowFileIncludes="false"
     requireVoidReturnType="true"
     useAssertForType="false"
@@ -21,6 +19,9 @@
 >
     <projectFiles>
         <directory name="src" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
     </projectFiles>
 
     <issueHandlers>
@@ -51,11 +52,9 @@
         <PossiblyNullPropertyFetch errorLevel="info" />
         <PossiblyNullReference errorLevel="info" />
         <PossiblyUndefinedVariable errorLevel="info" />
-        <PossiblyUnusedVariable errorLevel="info" />
 
         <!-- level 5 issues - should be avoided at mosts costs... -->
 
-        <FailedTypeResolution errorLevel="info" />
         <ForbiddenCode errorLevel="info" />
         <ImplicitToStringCast errorLevel="info" />
         <InvalidScalarArgument errorLevel="info" />

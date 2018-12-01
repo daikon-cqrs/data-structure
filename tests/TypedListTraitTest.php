@@ -221,13 +221,13 @@ final class TypedListTraitTest extends TestCase
         $this->assertTrue($list->getLast() === $list->get(1));
     }
 
-    public function testToArrayWorks()
+    public function testToNativeWorks()
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
         $a = [ $d0, $d1 ];
         $list = new DatetimeList($a);
-        $b = $list->toArray();
+        $b = $list->toNative();
         $this->assertTrue($a === $b);
         $this->assertTrue($a[0] === $b[0]);
         $this->assertTrue($a[1] === $b[1]);

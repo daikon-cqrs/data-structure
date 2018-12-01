@@ -6,25 +6,16 @@
     "homepage": "https://github.com/daikon-cqrs/data-structures",
     "license": "MPL-2.0",
     "prefer-stable": true,
-    "authors": [
-        {
-            "name": "Contributors",
-            "homepage": "https://github.com/daikon-cqrs/data-structure/graphs/contributors"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/daikon-cqrs/data-structure/issues"
-    },
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.1",
-        "php-ds/php-ds": "^1.1"
+        "php": "^7.2",
+        "php-ds/php-ds": "^1.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.2",
-        "squizlabs/php_codesniffer": "^3.0",
-        "sebastian/phpcpd": "^3.0",
-        "vimeo/psalm": "^0.3.47"
+        "phpunit/phpunit": "^7.4",
+        "squizlabs/php_codesniffer": "^3.3",
+        "sebastian/phpcpd": "^4.1",
+        "vimeo/psalm": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -43,21 +34,18 @@
         ]
     },
     "scripts": {
-        "build": [
-            "@sniff",
-            "@tests"
-        ],
-        "test": "phpunit --no-coverage",
-        "tests": "phpunit",
+        "build": [ "@sniff", "@tests" ],
+        "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' src/ tests/",
+        "code-sniffer-autofix": "phpcbf --standard=PSR2 -d tabWidth=4 src/ tests/",
+        "copy-paste-detector": "phpcpd src/ tests/ || true",
         "sniff": [
             "@code-sniffer",
             "@copy-paste-detector",
             "@validate-json",
             "psalm"
         ],
-        "code-sniffer-autofix": "phpcbf --standard=PSR2 -d tabWidth=4 src/ tests/",
-        "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' src/ tests/",
-        "copy-paste-detector": "phpcpd src/ tests/",
+        "test": "phpunit --no-coverage",
+        "tests": "phpunit",
         "validate-json": "composer validate --no-check-all --no-check-lock",
         "validate-deps": "composer validate --with-dependencies --strict"
     }

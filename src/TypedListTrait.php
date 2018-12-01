@@ -1,4 +1,11 @@
 <?php
+/**
+ * This file is part of the daikon-cqrs/data-structure project.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Daikon\DataStructure;
@@ -9,14 +16,10 @@ use Iterator;
 
 trait TypedListTrait
 {
-    /**
-     * @var Ds\Vector internal vector to store items
-     */
+    /** @var Vector */
     private $compositeVector;
 
-    /**
-     * @var string fully qualified class name of acceptable types
-     */
+    /** @var string fully qualified class name of acceptable types */
     private $itemFqcn;
 
     public function has(int $index): bool
@@ -101,7 +104,7 @@ trait TypedListTrait
         return $this->compositeVector->last();
     }
 
-    public function toArray(): array
+    public function toNative(): array
     {
         return $this->compositeVector->toArray();
     }

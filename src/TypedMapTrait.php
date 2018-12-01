@@ -1,4 +1,11 @@
 <?php
+/**
+ * This file is part of the daikon-cqrs/data-structure project.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Daikon\DataStructure;
@@ -9,14 +16,10 @@ use Iterator;
 
 trait TypedMapTrait
 {
-    /**
-     * @var Map internal map to store items
-     */
+    /** @var Map */
     private $compositeMap;
 
-    /**
-     * @var string[] fully qualified class name of acceptable types
-     */
+    /** @var string[] fully qualified class names of acceptable types */
     private $itemFqcns;
 
     public function has(string $key): bool
@@ -48,7 +51,7 @@ trait TypedMapTrait
         return count($this->compositeMap);
     }
 
-    public function toArray(): array
+    public function toNative(): array
     {
         return $this->compositeMap->toArray();
     }
