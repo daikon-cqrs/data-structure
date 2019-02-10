@@ -28,6 +28,7 @@ trait TypedMapTrait
     }
 
     /**
+     * @return mixed
      * @throws \OutOfBoundsException
      */
     public function get(string $key)
@@ -36,9 +37,10 @@ trait TypedMapTrait
     }
 
     /**
+     * @param mixed $item
      * @throws InvalidArgumentException
      */
-    public function set($key, $item): self
+    public function set(string $key, $item): self
     {
         $this->assertItemType($item);
         $copy = clone $this;
@@ -61,6 +63,7 @@ trait TypedMapTrait
         return $this->compositeMap->isEmpty();
     }
 
+    /** @psalm-suppress MoreSpecificReturnType */
     public function getIterator(): Iterator
     {
         return $this->compositeMap->getIterator();
@@ -72,6 +75,7 @@ trait TypedMapTrait
     }
 
     /**
+     * @return mixed
      * @throws \OutOfBoundsException
      */
     public function __get(string $key)
@@ -79,6 +83,7 @@ trait TypedMapTrait
         return $this->get($key);
     }
 
+    /** @param mixed $itemFqcns */
     private function init(iterable $items, $itemFqcns): void
     {
         $this->itemFqcns = (array)$itemFqcns;
@@ -86,9 +91,11 @@ trait TypedMapTrait
             $this->assertItemKey($key);
             $this->assertItemType($item);
         }
+        /** @psalm-suppress InvalidArgument */
         $this->compositeMap = new Map($items);
     }
 
+    /** @param mixed $key */
     private function assertItemKey($key): void
     {
         if (!is_string($key)) {
@@ -100,6 +107,7 @@ trait TypedMapTrait
         }
     }
 
+    /** @param mixed $item */
     private function assertItemType($item): void
     {
         $itemIsValid = false;
