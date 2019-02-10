@@ -28,6 +28,7 @@ trait TypedListTrait
     }
 
     /**
+     * @return mixed
      * @throws OutOfRangeException
      */
     public function get(int $index)
@@ -36,6 +37,7 @@ trait TypedListTrait
     }
 
     /**
+     * @param mixed $item
      * @throws InvalidArgumentException
      */
     public function push($item): self
@@ -47,6 +49,7 @@ trait TypedListTrait
     }
 
     /**
+     * @param mixed $item
      * @throws InvalidArgumentException
      */
     public function prepend($item): self
@@ -58,11 +61,15 @@ trait TypedListTrait
     }
 
     /**
+     * @param mixed $item
      * @throws InvalidArgumentException
      */
     public function remove($item): self
     {
         $idx = $this->indexOf($item);
+        if (!is_int($idx)) {
+            return $this;
+        }
         $copy = clone $this;
         $copy->compositeVector->remove($idx);
         return $copy;
@@ -86,19 +93,23 @@ trait TypedListTrait
     }
 
     /**
+     * @param mixed $item
+     * @return int|bool
      * @throws InvalidArgumentException
      */
-    public function indexOf($item): int
+    public function indexOf($item)
     {
         $this->assertItemType($item);
         return $this->compositeVector->find($item);
     }
 
+    /** @return mixed */
     public function getFirst()
     {
         return $this->compositeVector->first();
     }
 
+    /** @return mixed */
     public function getLast()
     {
         return $this->compositeVector->last();
@@ -109,6 +120,7 @@ trait TypedListTrait
         return $this->compositeVector->toArray();
     }
 
+    /** @psalm-suppress MoreSpecificReturnType */
     public function getIterator(): Iterator
     {
         return $this->compositeVector->getIterator();
@@ -129,6 +141,7 @@ trait TypedListTrait
         $this->compositeVector = new Vector($items);
     }
 
+    /** @param mixed $index */
     private function assertItemIndex($index): void
     {
         if (!is_int($index)) {
@@ -140,6 +153,7 @@ trait TypedListTrait
         }
     }
 
+    /** @param mixed $item */
     private function assertItemType($item): void
     {
         if (!is_a($item, $this->itemFqcn)) {
