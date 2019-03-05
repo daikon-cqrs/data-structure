@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="true"
     backupStaticAttributes="false"
     colors="true"
@@ -6,6 +7,8 @@
     convertWarningsToExceptions="true"
     processIsolation="false"
     stopOnFailure="false"
+    cacheResult="false"
+    cacheTokens="false"
 >
     <testsuites>
         <testsuite name="main">
