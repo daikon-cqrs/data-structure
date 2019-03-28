@@ -11,16 +11,14 @@ declare(strict_types=1);
 namespace Daikon\DataStructure;
 
 use Ds\Vector;
-use InvalidArgumentException;
-use Iterator;
 
 trait TypedListTrait
 {
     /** @var Vector */
     private $compositeVector;
 
-    /** @var string */
-    private $itemType;
+    /** @var null|string[] */
+    private $itemTypes;
 
     public function has(int $index): bool
     {
@@ -29,7 +27,7 @@ trait TypedListTrait
 
     /**
      * @return mixed
-     * @throws OutOfRangeException
+     * @throws \OutOfRangeException
      */
     public function get(int $index)
     {
@@ -38,7 +36,7 @@ trait TypedListTrait
 
     /**
      * @param mixed $item
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function push($item): self
     {
@@ -50,7 +48,7 @@ trait TypedListTrait
 
     /**
      * @param mixed $item
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function unshift($item): self
     {
@@ -62,7 +60,7 @@ trait TypedListTrait
 
     /**
      * @param mixed $item
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function remove($item): self
     {
@@ -95,7 +93,7 @@ trait TypedListTrait
     /**
      * @param mixed $item
      * @return int|bool
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function indexOf($item)
     {
@@ -121,19 +119,20 @@ trait TypedListTrait
     }
 
     /** @psalm-suppress MoreSpecificReturnType */
-    public function getIterator(): Iterator
+    public function getIterator(): \Iterator
     {
         return $this->compositeVector->getIterator();
     }
 
-    public function getItemType(): string
+    public function getItemTypes(): ?array
     {
-        return $this->itemType;
+        return $this->itemTypes;
     }
 
-    private function init(iterable $items, string $itemType): void
+    /** @var string|string[] $itemTypes */
+    private function init(iterable $items, $itemTypes): void
     {
-        $this->itemType = $itemType;
+        $this->itemTypes = (array)$itemTypes;
         foreach ($items as $index => $item) {
             $this->assertItemIndex($index);
             $this->assertItemType($item);
@@ -145,7 +144,7 @@ trait TypedListTrait
     private function assertItemIndex($index): void
     {
         if (!is_int($index)) {
-            throw new InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(sprintf(
                 'Invalid item key given to %s. Expected int but was given %s.',
                 static::class,
                 is_object($index) ? get_class($index) : @gettype($index)
@@ -156,11 +155,23 @@ trait TypedListTrait
     /** @param mixed $item */
     private function assertItemType($item): void
     {
-        if (!is_a($item, $this->itemType)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid item type given to %s. Expected %s but was given %s.',
+        if (empty($this->itemTypes)) {
+            throw new \RuntimeException('Item types have not been specified.');
+        }
+
+        $itemIsValid = false;
+        foreach ($this->itemTypes as $type) {
+            if (is_a($item, $type)) {
+                $itemIsValid = true;
+                break;
+            }
+        }
+
+        if (!$itemIsValid) {
+            throw new \InvalidArgumentException(sprintf(
+                'Invalid item type given to %s. Expected one of %s but was given %s.',
                 static::class,
-                $this->itemType,
+                implode(', ', $this->itemTypes),
                 is_object($item) ? get_class($item) : @gettype($item)
             ));
         }

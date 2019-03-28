@@ -11,15 +11,13 @@ declare(strict_types=1);
 namespace Daikon\DataStructure;
 
 use Ds\Map;
-use InvalidArgumentException;
-use Iterator;
 
 trait TypedMapTrait
 {
     /** @var Map */
     private $compositeMap;
 
-    /** @var string[] */
+    /** @var null|string[] */
     private $itemTypes;
 
     public function has(string $key): bool
@@ -38,7 +36,7 @@ trait TypedMapTrait
 
     /**
      * @param mixed $item
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function set(string $key, $item): self
     {
@@ -64,7 +62,7 @@ trait TypedMapTrait
     }
 
     /** @psalm-suppress MoreSpecificReturnType */
-    public function getIterator(): Iterator
+    public function getIterator(): \Iterator
     {
         return $this->compositeMap->getIterator();
     }
@@ -83,7 +81,7 @@ trait TypedMapTrait
         return $this->get($key);
     }
 
-    /** @param mixed $itemTypes */
+    /** @param string|string[] $itemTypes */
     private function init(iterable $items, $itemTypes): void
     {
         $this->itemTypes = (array)$itemTypes;
@@ -95,13 +93,13 @@ trait TypedMapTrait
         $this->compositeMap = new Map($items);
     }
 
-    /** @param mixed $key */
+    /** @param string $key */
     private function assertItemKey($key): void
     {
         if (!is_string($key)) {
-            throw new InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(sprintf(
                 'Invalid item key given to %s. Expected string but was given %s.',
-                static::CLASS,
+                static::class,
                 is_object($key) ? get_class($key) : @gettype($key)
             ));
         }
@@ -110,15 +108,20 @@ trait TypedMapTrait
     /** @param mixed $item */
     private function assertItemType($item): void
     {
+        if (empty($this->itemTypes)) {
+            throw new \RuntimeException('Item types have not been specified.');
+        }
+
         $itemIsValid = false;
-        foreach ($this->itemTypes as $fqcn) {
-            if (is_a($item, $fqcn)) {
+        foreach ($this->itemTypes as $type) {
+            if (is_a($item, $type)) {
                 $itemIsValid = true;
                 break;
             }
         }
+
         if (!$itemIsValid) {
-            throw new InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(sprintf(
                 'Invalid item type given to %s. Expected one of %s but was given %s.',
                 static::class,
                 implode(', ', $this->itemTypes),
@@ -129,6 +132,6 @@ trait TypedMapTrait
 
     public function __clone()
     {
-        $this->compositeMap = new Map($this->compositeMap->toArray());
+        $this->compositeMap = clone $this->compositeMap;
     }
 }

@@ -18,6 +18,6 @@ final class DatetimeList implements \IteratorAggregate, \Countable
 
     public function __construct(array $datetimes = [])
     {
-        $this->init($datetimes, DatetimeInterface::CLASS);
+        $this->init($datetimes, DatetimeInterface::class);
     }
 }
