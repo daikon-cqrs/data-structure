@@ -53,9 +53,9 @@ final class TypedListTraitTest extends TestCase
         $list = new DatetimeList([ 'a' => $d0 ]);
     } // @codeCoverageIgnore
 
-    public function testGetItemFqcnWorks()
+    public function testGetItemTypeWorks()
     {
-        $this->assertEquals(DateTimeInterface::CLASS, (new DatetimeList())->getItemFqcn());
+        $this->assertEquals(DateTimeInterface::CLASS, (new DatetimeList())->getItemType());
     }
 
     public function testCountWorks()
@@ -131,12 +131,12 @@ final class TypedListTraitTest extends TestCase
         $list = $list->push($d1);
     } // @codeCoverageIgnore
 
-    public function testPrependWorks()
+    public function testUnshiftWorks()
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
         $list = new DatetimeList([ $d1 ]);
-        $list = $list->prepend($d0);
+        $list = $list->unshift($d0);
         $this->assertSame($d0, $list->get(0));
         $this->assertTrue($d0 === $list->get(0));
         $this->assertSame($d1, $list->get(1));
@@ -144,7 +144,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertEquals(2, $list->count());
     }
 
-    public function testPrependFailsOnUnacceptableType()
+    public function testUnshiftFailsOnUnacceptableType()
     {
         $d0 = new DateTime;
         $d1 = new \stdClass;
@@ -155,7 +155,7 @@ final class TypedListTraitTest extends TestCase
             'Invalid item type given to Daikon\Tests\DataStructure\Fixture\DatetimeList. '.
             'Expected DateTimeInterface but was given stdClass.'
         );
-        $list = $list->prepend($d1);
+        $list = $list->unshift($d1);
     } // @codeCoverageIgnore
 
     public function testReverseWorks()

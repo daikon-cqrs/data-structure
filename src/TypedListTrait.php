@@ -19,8 +19,8 @@ trait TypedListTrait
     /** @var Vector */
     private $compositeVector;
 
-    /** @var string fully qualified class name of acceptable types */
-    private $itemFqcn;
+    /** @var string */
+    private $itemType;
 
     public function has(int $index): bool
     {
@@ -52,7 +52,7 @@ trait TypedListTrait
      * @param mixed $item
      * @throws InvalidArgumentException
      */
-    public function prepend($item): self
+    public function unshift($item): self
     {
         $this->assertItemType($item);
         $copy = clone $this;
@@ -66,12 +66,12 @@ trait TypedListTrait
      */
     public function remove($item): self
     {
-        $idx = $this->indexOf($item);
-        if (!is_int($idx)) {
+        $index = $this->indexOf($item);
+        if ($index === false) {
             return $this;
         }
         $copy = clone $this;
-        $copy->compositeVector->remove($idx);
+        $copy->compositeVector->remove($index);
         return $copy;
     }
 
@@ -126,14 +126,14 @@ trait TypedListTrait
         return $this->compositeVector->getIterator();
     }
 
-    public function getItemFqcn(): string
+    public function getItemType(): string
     {
-        return $this->itemFqcn;
+        return $this->itemType;
     }
 
-    private function init(iterable $items, string $itemFqcn): void
+    private function init(iterable $items, string $itemType): void
     {
-        $this->itemFqcn = $itemFqcn;
+        $this->itemType = $itemType;
         foreach ($items as $index => $item) {
             $this->assertItemIndex($index);
             $this->assertItemType($item);
@@ -147,7 +147,7 @@ trait TypedListTrait
         if (!is_int($index)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid item key given to %s. Expected int but was given %s.',
-                static::CLASS,
+                static::class,
                 is_object($index) ? get_class($index) : @gettype($index)
             ));
         }
@@ -156,11 +156,11 @@ trait TypedListTrait
     /** @param mixed $item */
     private function assertItemType($item): void
     {
-        if (!is_a($item, $this->itemFqcn)) {
+        if (!is_a($item, $this->itemType)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid item type given to %s. Expected %s but was given %s.',
-                static::CLASS,
-                $this->itemFqcn,
+                static::class,
+                $this->itemType,
                 is_object($item) ? get_class($item) : @gettype($item)
             ));
         }

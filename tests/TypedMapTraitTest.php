@@ -63,9 +63,9 @@ final class TypedMapTraitTest extends TestCase
         new DatetimeMap([ 123 => $d0 ]);
     } // @codeCoverageIgnore
 
-    public function testGetItemFqcnWorks()
+    public function testGetItemTypesWorks()
     {
-        $this->assertEquals([DateTimeInterface::class], (new DatetimeMap)->getItemFqcn());
+        $this->assertEquals([DateTimeInterface::class], (new DatetimeMap)->getItemTypes());
     }
 
     public function testCountWorks()

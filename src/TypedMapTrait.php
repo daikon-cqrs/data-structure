@@ -19,8 +19,8 @@ trait TypedMapTrait
     /** @var Map */
     private $compositeMap;
 
-    /** @var string[] fully qualified class names of acceptable types */
-    private $itemFqcns;
+    /** @var string[] */
+    private $itemTypes;
 
     public function has(string $key): bool
     {
@@ -69,9 +69,9 @@ trait TypedMapTrait
         return $this->compositeMap->getIterator();
     }
 
-    public function getItemFqcn(): array
+    public function getItemTypes(): array
     {
-        return $this->itemFqcns;
+        return $this->itemTypes;
     }
 
     /**
@@ -83,10 +83,10 @@ trait TypedMapTrait
         return $this->get($key);
     }
 
-    /** @param mixed $itemFqcns */
-    private function init(iterable $items, $itemFqcns): void
+    /** @param mixed $itemTypes */
+    private function init(iterable $items, $itemTypes): void
     {
-        $this->itemFqcns = (array)$itemFqcns;
+        $this->itemTypes = (array)$itemTypes;
         foreach ($items as $key => $item) {
             $this->assertItemKey($key);
             $this->assertItemType($item);
@@ -111,7 +111,7 @@ trait TypedMapTrait
     private function assertItemType($item): void
     {
         $itemIsValid = false;
-        foreach ($this->itemFqcns as $fqcn) {
+        foreach ($this->itemTypes as $fqcn) {
             if (is_a($item, $fqcn)) {
                 $itemIsValid = true;
                 break;
@@ -121,7 +121,7 @@ trait TypedMapTrait
             throw new InvalidArgumentException(sprintf(
                 'Invalid item type given to %s. Expected one of %s but was given %s.',
                 static::class,
-                implode(', ', $this->itemFqcns),
+                implode(', ', $this->itemTypes),
                 is_object($item) ? get_class($item) : @gettype($item)
             ));
         }
