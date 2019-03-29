@@ -69,6 +69,7 @@ trait TypedListTrait
             return $this;
         }
         $copy = clone $this;
+        /** @psalm-suppress PossiblyInvalidArgument */
         $copy->compositeVector->remove($index);
         return $copy;
     }
@@ -129,7 +130,7 @@ trait TypedListTrait
         return $this->itemTypes;
     }
 
-    /** @var string|string[] $itemTypes */
+    /** @param string|string[] $itemTypes */
     private function init(iterable $items, $itemTypes): void
     {
         $this->itemTypes = (array)$itemTypes;
