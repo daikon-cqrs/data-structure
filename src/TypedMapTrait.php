@@ -67,7 +67,7 @@ trait TypedMapTrait
         return $this->compositeMap->getIterator();
     }
 
-    public function getItemTypes(): array
+    public function getItemTypes(): ?array
     {
         return $this->itemTypes;
     }
