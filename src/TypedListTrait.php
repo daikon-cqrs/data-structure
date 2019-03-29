@@ -179,6 +179,6 @@ trait TypedListTrait
 
     private function __clone()
     {
-        $this->compositeVector = clone $this->compositeVector;
+        $this->compositeVector = new Vector($this->compositeVector->toArray());
     }
 }

@@ -132,6 +132,6 @@ trait TypedMapTrait
 
     public function __clone()
     {
-        $this->compositeMap = clone $this->compositeMap;
+        $this->compositeMap = new Map($this->compositeMap->toArray());
     }
 }
