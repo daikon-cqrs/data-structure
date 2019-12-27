@@ -16,6 +16,7 @@ use InvalidArgumentException;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Traversable;
 
 final class TypedMapTraitTest extends TestCase
 {
@@ -93,7 +94,7 @@ final class TypedMapTraitTest extends TestCase
     public function testGetIteratorWorks(): void
     {
         $map = new DatetimeMap(['a' => new DateTime, 'b' => new DateTimeImmutable]);
-        $this->assertInstanceOf(\Iterator::class, $map->getIterator());
+        $this->assertInstanceOf(Traversable::class, $map->getIterator());
     }
 
     public function testGetWorks(): void

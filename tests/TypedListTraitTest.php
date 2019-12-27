@@ -15,6 +15,8 @@ use DateTimeInterface;
 use InvalidArgumentException;
 use OutOfRangeException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use Traversable;
 
 final class TypedListTraitTest extends TestCase
 {
@@ -84,7 +86,7 @@ final class TypedListTraitTest extends TestCase
     public function testGetIteratorWorks(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
-        $this->assertInstanceOf(\Iterator::class, $list->getIterator());
+        $this->assertInstanceOf(Traversable::class, $list->getIterator());
     }
 
     public function testGetWorks(): void
@@ -145,7 +147,7 @@ final class TypedListTraitTest extends TestCase
     public function testUnshiftFailsOnUnacceptableType(): void
     {
         $d0 = new DateTime;
-        $d1 = new \stdClass;
+        $d1 = new stdClass;
         $list = new DatetimeList([$d0]);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(0);
@@ -198,7 +200,7 @@ final class TypedListTraitTest extends TestCase
             'Invalid item type given to Daikon\Tests\DataStructure\Fixture\DatetimeList. '.
             'Expected one of DateTimeInterface but was given stdClass.'
         );
-        $list = $list->remove(new \stdClass);
+        $list = $list->remove(new stdClass);
     } // @codeCoverageIgnore
 
     public function testGetFirstWorks(): void
