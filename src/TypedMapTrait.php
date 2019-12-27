@@ -9,14 +9,18 @@
 namespace Daikon\DataStructure;
 
 use Ds\Map;
+use InvalidArgumentException;
+use OutOfBoundsException;
+use RuntimeException;
+use Traversable;
 
 trait TypedMapTrait
 {
     /** @var Map */
     private $compositeMap;
 
-    /** @var null|string[] */
-    private $itemTypes;
+    /** @var string[] */
+    private $itemTypes = [];
 
     public function has(string $key): bool
     {
@@ -25,7 +29,7 @@ trait TypedMapTrait
 
     /**
      * @return mixed
-     * @throws \OutOfBoundsException
+     * @throws OutOfBoundsException
      */
     public function get(string $key)
     {
@@ -34,7 +38,7 @@ trait TypedMapTrait
 
     /**
      * @param mixed $item
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function set(string $key, $item): self
     {
@@ -59,20 +63,19 @@ trait TypedMapTrait
         return $this->compositeMap->isEmpty();
     }
 
-    /** @psalm-suppress MoreSpecificReturnType */
-    public function getIterator(): \Iterator
+    public function getIterator(): Traversable
     {
         return $this->compositeMap->getIterator();
     }
 
-    public function getItemTypes(): ?array
+    public function getItemTypes(): array
     {
         return $this->itemTypes;
     }
 
     /**
      * @return mixed
-     * @throws \OutOfBoundsException
+     * @throws OutOfBoundsException
      */
     public function __get(string $key)
     {
@@ -87,7 +90,6 @@ trait TypedMapTrait
             $this->assertItemKey($key);
             $this->assertItemType($item);
         }
-        /** @psalm-suppress InvalidArgument */
         $this->compositeMap = new Map($items);
     }
 
@@ -95,7 +97,7 @@ trait TypedMapTrait
     private function assertItemKey($key): void
     {
         if (!is_string($key)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Invalid item key given to %s. Expected string but was given %s.',
                 static::class,
                 is_object($key) ? get_class($key) : @gettype($key)
@@ -107,7 +109,7 @@ trait TypedMapTrait
     private function assertItemType($item): void
     {
         if (empty($this->itemTypes)) {
-            throw new \RuntimeException('Item types have not been specified.');
+            throw new RuntimeException('Item types have not been specified.');
         }
 
         $itemIsValid = false;
@@ -119,7 +121,7 @@ trait TypedMapTrait
         }
 
         if (!$itemIsValid) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Invalid item type given to %s. Expected one of %s but was given %s.',
                 static::class,
                 implode(', ', $this->itemTypes),
