@@ -91,7 +91,7 @@ trait TypedMapTrait
         $this->compositeMap = new Map($items);
     }
 
-    /** @param string $key */
+    /** @param mixed $key */
     private function assertItemKey($key): void
     {
         if (!is_string($key)) {

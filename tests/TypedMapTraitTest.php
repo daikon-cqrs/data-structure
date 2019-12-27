@@ -15,6 +15,7 @@ use DateTimeInterface;
 use InvalidArgumentException;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 final class TypedMapTraitTest extends TestCase
 {
@@ -150,7 +151,7 @@ final class TypedMapTraitTest extends TestCase
     public function testSetFailsOnUnacceptableType(): void
     {
         $d0 = new DateTime;
-        $d1 = new \stdClass;
+        $d1 = new stdClass;
         $map = new DatetimeMap(['a' => $d0]);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(0);

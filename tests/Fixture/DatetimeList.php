@@ -8,10 +8,12 @@
 
 namespace Daikon\Tests\DataStructure\Fixture;
 
+use Countable;
 use Daikon\DataStructure\TypedListTrait;
 use DateTimeInterface;
+use IteratorAggregate;
 
-final class DatetimeList implements \IteratorAggregate, \Countable
+final class DatetimeList implements IteratorAggregate, Countable
 {
     use TypedListTrait;
 

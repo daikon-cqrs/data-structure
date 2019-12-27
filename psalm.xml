@@ -53,6 +53,7 @@
 
         <!-- level 4 issues - points to possible deficiencies in logic, higher false-positives -->
 
+        <MoreSpecificImplementedParamType errorLevel="info" />
         <MoreSpecificReturnType errorLevel="info" />
         <LessSpecificReturnStatement errorLevel="info" />
         <TypeCoercion errorLevel="info" />
