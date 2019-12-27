@@ -1,12 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/data-structure project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace Daikon\Tests\DataStructure;
 
@@ -20,18 +18,18 @@ use PHPUnit\Framework\TestCase;
 
 final class TypedMapTraitTest extends TestCase
 {
-    public function testConstructNoParamsWorks()
+    public function testConstructNoParamsWorks(): void
     {
         $this->assertInstanceOf(DatetimeMap::class, new DatetimeMap);
     }
 
-    public function testConstructWithParamsWorks()
+    public function testConstructWithParamsWorks(): void
     {
         $map = new DatetimeMap(['now' => new DateTime, 'nower' => new DateTimeImmutable]);
         $this->assertInstanceOf(DatetimeMap::class, $map);
     }
 
-    public function testConstructWithIndexedParamsWorks()
+    public function testConstructWithIndexedParamsWorks(): void
     {
         $map = new DatetimeMap(['a1337' => new DateTime, 'yes' => new DateTimeImmutable]);
         $this->assertInstanceOf(DatetimeMap::class, $map);
@@ -40,7 +38,7 @@ final class TypedMapTraitTest extends TestCase
         $this->assertTrue($map->has('a1337'));
     }
 
-    public function testConstructWithIntegerStringAsKeyThrowsBecausePhp()
+    public function testConstructWithIntegerStringAsKeyThrowsBecausePhp(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(0);
@@ -51,7 +49,7 @@ final class TypedMapTraitTest extends TestCase
         new DatetimeMap(['1337' => new DateTime]);
     } // @codeCoverageIgnore
 
-    public function testConstructFailsOnInvalidIndex()
+    public function testConstructFailsOnInvalidIndex(): void
     {
         $d0 = new DateTime;
         $this->expectException(InvalidArgumentException::class);
@@ -63,18 +61,18 @@ final class TypedMapTraitTest extends TestCase
         new DatetimeMap([123 => $d0]);
     } // @codeCoverageIgnore
 
-    public function testGetItemTypesWorks()
+    public function testGetItemTypesWorks(): void
     {
         $this->assertEquals([DateTimeInterface::class], (new DatetimeMap)->getItemTypes());
     }
 
-    public function testCountWorks()
+    public function testCountWorks(): void
     {
         $map = new DatetimeMap(['a' => new DateTime, 'b' => new DateTimeImmutable]);
         $this->assertEquals(2, $map->count());
     }
 
-    public function testIsEmptyWorks()
+    public function testIsEmptyWorks(): void
     {
         $map = new DatetimeMap(['a' => new DateTime, 'b' => new DateTimeImmutable]);
         $this->assertFalse($map->isEmpty());
@@ -82,7 +80,7 @@ final class TypedMapTraitTest extends TestCase
         $this->assertTrue($map->isEmpty());
     }
 
-    public function testHasWorks()
+    public function testHasWorks(): void
     {
         $map = new DatetimeMap(['a' => new DateTime, 'b' => new DateTimeImmutable]);
         $this->assertTrue($map->has('a'));
@@ -91,13 +89,13 @@ final class TypedMapTraitTest extends TestCase
         $this->assertFalse($map->has('B'));
     }
 
-    public function testGetIteratorWorks()
+    public function testGetIteratorWorks(): void
     {
         $map = new DatetimeMap(['a' => new DateTime, 'b' => new DateTimeImmutable]);
         $this->assertInstanceOf(\Iterator::class, $map->getIterator());
     }
 
-    public function testGetWorks()
+    public function testGetWorks(): void
     {
         $d1 = new DateTime;
         $map = new DatetimeMap(['a' => $d1, 'b' => new DateTimeImmutable]);
@@ -105,7 +103,7 @@ final class TypedMapTraitTest extends TestCase
         $this->assertTrue($d1 === $map->get('a'));
     }
 
-    public function testGetThrowsForNonExistantKey()
+    public function testGetThrowsForNonExistantKey(): void
     {
         $map = new DatetimeMap(['a' => new Datetime]);
         $this->expectException(OutOfBoundsException::class);
@@ -113,7 +111,7 @@ final class TypedMapTraitTest extends TestCase
         $map->get('non-existant');
     } // @codeCoverageIgnore
 
-    public function testGetThrowsForInternalProperties()
+    public function testGetThrowsForInternalProperties(): void
     {
         $map = new DatetimeMap(['a' => new Datetime]);
         $this->expectException(OutOfBoundsException::class);
@@ -121,7 +119,7 @@ final class TypedMapTraitTest extends TestCase
         $map->itemFqcns;
     } // @codeCoverageIgnore
 
-    public function testImplicitGetWorks()
+    public function testImplicitGetWorks(): void
     {
         $d1 = new DateTime;
         $map = new DatetimeMap(['a' => $d1, 'b' => new DateTimeImmutable]);
@@ -129,7 +127,7 @@ final class TypedMapTraitTest extends TestCase
         $this->assertTrue($d1 === $map->a);
     }
 
-    public function testImplicitGetWorksForWeirdKey()
+    public function testImplicitGetWorksForWeirdKey(): void
     {
         $d1 = new DateTime;
         $key = '_a.b.123-456';
@@ -138,7 +136,7 @@ final class TypedMapTraitTest extends TestCase
         $this->assertTrue($d1 === $map->$key);
     }
 
-    public function testSetWorks()
+    public function testSetWorks(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
@@ -149,7 +147,7 @@ final class TypedMapTraitTest extends TestCase
         $this->assertEquals(2, $map->count());
     }
 
-    public function testSetFailsOnUnacceptableType()
+    public function testSetFailsOnUnacceptableType(): void
     {
         $d0 = new DateTime;
         $d1 = new \stdClass;
@@ -163,7 +161,7 @@ final class TypedMapTraitTest extends TestCase
         $map->set('b', $d1);
     } // @codeCoverageIgnore
 
-    public function testToNativeWorks()
+    public function testToNativeWorks(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;

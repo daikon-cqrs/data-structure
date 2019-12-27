@@ -1,12 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/data-structure project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace Daikon\Tests\DataStructure;
 
@@ -20,18 +18,18 @@ use PHPUnit\Framework\TestCase;
 
 final class TypedListTraitTest extends TestCase
 {
-    public function testConstructNoParamsWorks()
+    public function testConstructNoParamsWorks(): void
     {
         $this->assertInstanceOf(DatetimeList::class, new DatetimeList);
     }
 
-    public function testConstructWithParamsWorks()
+    public function testConstructWithParamsWorks(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
         $this->assertInstanceOf(DatetimeList::class, $list);
     }
 
-    public function testConstructWithIndexedParamsWorks()
+    public function testConstructWithIndexedParamsWorks(): void
     {
         $list = new DatetimeList([1337 => new DateTime, -7 => new DateTimeImmutable]);
         $this->assertInstanceOf(DatetimeList::class, $list);
@@ -41,7 +39,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertFalse($list->has(1337));
     }
 
-    public function testConstructFailsOnInvalidIndex()
+    public function testConstructFailsOnInvalidIndex(): void
     {
         $d0 = new DateTime;
         $this->expectException(InvalidArgumentException::class);
@@ -53,18 +51,18 @@ final class TypedListTraitTest extends TestCase
         $list = new DatetimeList(['a' => $d0]);
     } // @codeCoverageIgnore
 
-    public function testGetItemTypesWorks()
+    public function testGetItemTypesWorks(): void
     {
         $this->assertEquals([DateTimeInterface::class], (new DatetimeList)->getItemTypes());
     }
 
-    public function testCountWorks()
+    public function testCountWorks(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
         $this->assertEquals(2, $list->count());
     }
 
-    public function testIsEmptyWorks()
+    public function testIsEmptyWorks(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
         $this->assertFalse($list->isEmpty());
@@ -74,7 +72,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertTrue($list->remove($d)->isEmpty());
     }
 
-    public function testHasWorks()
+    public function testHasWorks(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
         $this->assertTrue($list->has(0));
@@ -83,13 +81,13 @@ final class TypedListTraitTest extends TestCase
         $this->assertFalse($list->has(-1));
     }
 
-    public function testGetIteratorWorks()
+    public function testGetIteratorWorks(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
         $this->assertInstanceOf(\Iterator::class, $list->getIterator());
     }
 
-    public function testGetWorks()
+    public function testGetWorks(): void
     {
         $d1 = new DateTime;
         $list = new DatetimeList([$d1]);
@@ -98,7 +96,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertTrue($d1 === $list->get(0));
     }
 
-    public function testGetThrowsForNonExistantKey()
+    public function testGetThrowsForNonExistantKey(): void
     {
         $map = new DatetimeList([new Datetime]);
         $this->expectException(OutOfRangeException::class);
@@ -106,7 +104,7 @@ final class TypedListTraitTest extends TestCase
         $map->get(1);
     } // @codeCoverageIgnore
 
-    public function testPushWorks()
+    public function testPushWorks(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
@@ -117,7 +115,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertEquals(2, $list->count());
     }
 
-    public function testPushFailsOnUnacceptableType()
+    public function testPushFailsOnUnacceptableType(): void
     {
         $d0 = new DateTime;
         $d1 = new \stdClass;
@@ -131,7 +129,7 @@ final class TypedListTraitTest extends TestCase
         $list = $list->push($d1);
     } // @codeCoverageIgnore
 
-    public function testUnshiftWorks()
+    public function testUnshiftWorks(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
@@ -144,7 +142,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertEquals(2, $list->count());
     }
 
-    public function testUnshiftFailsOnUnacceptableType()
+    public function testUnshiftFailsOnUnacceptableType(): void
     {
         $d0 = new DateTime;
         $d1 = new \stdClass;
@@ -158,7 +156,7 @@ final class TypedListTraitTest extends TestCase
         $list = $list->unshift($d1);
     } // @codeCoverageIgnore
 
-    public function testReverseWorks()
+    public function testReverseWorks(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
@@ -174,7 +172,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertEquals(2, $list_reversed->count());
     }
 
-    public function testRemoveWorks()
+    public function testRemoveWorks(): void
     {
         $d0 = new DateTimeImmutable;
         $d1 = new DateTimeImmutable;
@@ -190,7 +188,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertTrue($d0 === $list->get(0));
     }
 
-    public function testRemoveFailsOnUnacceptableType()
+    public function testRemoveFailsOnUnacceptableType(): void
     {
         $d0 = new DateTime;
         $list = new DatetimeList([$d0]);
@@ -203,7 +201,7 @@ final class TypedListTraitTest extends TestCase
         $list = $list->remove(new \stdClass);
     } // @codeCoverageIgnore
 
-    public function testGetFirstWorks()
+    public function testGetFirstWorks(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
@@ -212,7 +210,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertTrue($list->getFirst() === $list->get(0));
     }
 
-    public function testGetLastWorks()
+    public function testGetLastWorks(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
@@ -221,7 +219,7 @@ final class TypedListTraitTest extends TestCase
         $this->assertTrue($list->getLast() === $list->get(1));
     }
 
-    public function testToNativeWorks()
+    public function testToNativeWorks(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
