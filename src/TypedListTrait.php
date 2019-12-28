@@ -10,9 +10,9 @@ namespace Daikon\DataStructure;
 
 use Ds\Vector;
 use InvalidArgumentException;
-use Iterator;
 use OutOfRangeException;
 use RuntimeException;
+use Traversable;
 
 trait TypedListTrait
 {
@@ -120,7 +120,7 @@ trait TypedListTrait
         return $this->compositeVector->toArray();
     }
 
-    public function getIterator(): Iterator
+    public function getIterator(): Traversable
     {
         return $this->compositeVector->getIterator();
     }
