@@ -9,10 +9,10 @@
 namespace Daikon\DataStructure;
 
 use Ds\Map;
+use Generator;
 use InvalidArgumentException;
 use OutOfBoundsException;
 use RuntimeException;
-use Traversable;
 
 trait TypedMapTrait
 {
@@ -63,7 +63,7 @@ trait TypedMapTrait
         return $this->compositeMap->isEmpty();
     }
 
-    public function getIterator(): Traversable
+    public function getIterator(): Generator
     {
         return $this->compositeMap->getIterator();
     }
