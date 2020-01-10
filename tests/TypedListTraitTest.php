@@ -9,33 +9,32 @@
 namespace Daikon\Tests\DataStructure;
 
 use Daikon\Tests\DataStructure\Fixture\DatetimeList;
+use Daikon\Tests\DataStructure\Fixture\DatetimeMap;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
-use OutOfRangeException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Traversable;
 
 final class TypedListTraitTest extends TestCase
 {
-    public function testConstructNoParamsWorks(): void
+    public function testConstructWithoutParams(): void
     {
         $this->assertInstanceOf(DatetimeList::class, new DatetimeList);
     }
 
-    public function testConstructWithParamsWorks(): void
+    public function testConstructWithParams(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
+        /** @psalm-suppress RedundantCondition */
         $this->assertInstanceOf(DatetimeList::class, $list);
     }
 
-    public function testConstructWithIndexedParamsWorks(): void
+    public function testConstructWithIndexedParams(): void
     {
         $list = new DatetimeList([1337 => new DateTime, -7 => new DateTimeImmutable]);
-        $this->assertInstanceOf(DatetimeList::class, $list);
-        $this->assertEquals(2, $list->count());
+        $this->assertCount(2, $list);
         $this->assertTrue($list->has(0));
         $this->assertTrue($list->has(1));
         $this->assertFalse($list->has(1337));
@@ -45,36 +44,12 @@ final class TypedListTraitTest extends TestCase
     {
         $d0 = new DateTime;
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(0);
-        $this->expectExceptionMessage(
-            'Invalid item key given to Daikon\Tests\DataStructure\Fixture\DatetimeList. '.
-            'Expected int but was given string.'
-        );
-        $list = new DatetimeList(['a' => $d0]);
+        $this->expectExceptionCode(12);
+        $this->expectExceptionMessage('Index must be a valid integer');
+        new DatetimeList(['a' => $d0]);
     } // @codeCoverageIgnore
 
-    public function testGetItemTypesWorks(): void
-    {
-        $this->assertEquals([DateTimeInterface::class], (new DatetimeList)->getItemTypes());
-    }
-
-    public function testCountWorks(): void
-    {
-        $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
-        $this->assertEquals(2, $list->count());
-    }
-
-    public function testIsEmptyWorks(): void
-    {
-        $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
-        $this->assertFalse($list->isEmpty());
-        $list = new DatetimeList;
-        $this->assertTrue($list->isEmpty());
-        $list = new DatetimeList([$d = new DateTime]);
-        $this->assertTrue($list->remove($d)->isEmpty());
-    }
-
-    public function testHasWorks(): void
+    public function testHas(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
         $this->assertTrue($list->has(0));
@@ -83,65 +58,237 @@ final class TypedListTraitTest extends TestCase
         $this->assertFalse($list->has(-1));
     }
 
-    public function testGetIteratorWorks(): void
-    {
-        $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
-        $this->assertInstanceOf(Traversable::class, $list->getIterator());
-    }
-
-    public function testGetWorks(): void
+    public function testGet(): void
     {
         $d1 = new DateTime;
         $list = new DatetimeList([$d1]);
-        $this->assertTrue($list->has(0));
-        $this->assertSame($d1, $list->get(0));
-        $this->assertTrue($d1 === $list->get(0));
+        $unwrappedList = $list->unwrap();
+        $this->assertNotSame($d1, $unwrappedList[0]);
+        $this->assertEquals($d1, $unwrappedList[0]);
+        $this->assertNotSame($d1, $list->get(0));
+        $this->assertEquals($d1, $list->get(0));
     }
 
-    public function testGetThrowsForNonExistantKey(): void
+    public function testGetWithDefault(): void
     {
-        $map = new DatetimeList([new Datetime]);
-        $this->expectException(OutOfRangeException::class);
-        $this->expectExceptionCode(0);
-        $map->get(1);
+        $d1 = new DateTime;
+        $default = new DateTime('@1234567');
+        $list = new DatetimeList([$d1]);
+        $this->assertNotSame($default, $list->get(1, $default));
+        $this->assertEquals($default, $list->get(1, $default));
+    }
+
+    public function testGetWithNullDefault(): void
+    {
+        $d1 = new DateTime;
+        $list = new DatetimeList([$d1]);
+        $this->assertNull($list->get(1, null));
+    }
+
+    public function testGetWithInvalidDefault(): void
+    {
+        $d1 = new DateTime;
+        $list = new DatetimeList([$d1]);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(32);
+        $this->expectExceptionMessage(
+            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeList, '.
+            "expected one of [DateTimeInterface] but was given 'stdClass'"
+        );
+        $list->get(1, new stdClass);
+    }
+
+    public function testGetWithNoDefault(): void
+    {
+        $list = new DatetimeList;
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(32);
+        $this->expectExceptionMessage("Index 1 not found and no default provided");
+        $list->get(1);
     } // @codeCoverageIgnore
 
-    public function testPushWorks(): void
+    public function testGetWithInvalidIndex(): void
+    {
+        $d0 = new DateTime;
+        $list = new DatetimeList([$d0]);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(32);
+        $this->expectExceptionMessage("Index 1 not found");
+        $list->get(1);
+    } // @codeCoverageIgnore
+
+    public function testWith(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
         $list = new DatetimeList([$d0]);
-        $list = $list->push($d1);
-        $this->assertSame($d0, $list->get(0));
-        $this->assertSame($d1, $list->get(1));
-        $this->assertEquals(2, $list->count());
+        $unwrappedList = $list->with(0, $d1)->unwrap();
+        $this->assertNotSame($d1, $unwrappedList[0]);
+        $this->assertEquals($d1, $unwrappedList[0]);
+        $this->assertCount(1, $unwrappedList);
     }
 
-    public function testPushFailsOnUnacceptableType(): void
+    public function testWithInvalidIndex(): void
     {
         $d0 = new DateTime;
-        $d1 = new \stdClass;
+        $d1 = new DateTimeImmutable;
         $list = new DatetimeList([$d0]);
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(0);
+        $this->expectExceptionCode(32);
+        $this->expectExceptionMessage("Index 1 not found");
+        $list->with(1, $d1);
+    }
+
+    public function testWithFailsOnUnacceptableType(): void
+    {
+        $d0 = new DateTime;
+        $d1 = new stdClass;
+        $list = new DatetimeList([$d0]);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
-            'Invalid item type given to Daikon\Tests\DataStructure\Fixture\DatetimeList. '.
-            'Expected one of DateTimeInterface but was given stdClass.'
+            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeList, '.
+            "expected one of [DateTimeInterface] but was given 'stdClass'"
         );
-        $list = $list->push($d1);
+        $list->with(0, $d1);
     } // @codeCoverageIgnore
 
-    public function testUnshiftWorks(): void
+    public function testWithout(): void
+    {
+        $d0 = new DateTimeImmutable;
+        $d1 = new DateTimeImmutable;
+        $d2 = new DateTime;
+        $list = new DatetimeList([$d0, $d1, $d2]);
+        $unwrappedList = $list->unwrap();
+        $this->assertCount(3, $list);
+        $prunedList = $list->without(1)->unwrap();
+        $this->assertNotSame($unwrappedList[0], $prunedList[0]);
+        $this->assertEquals($unwrappedList[0], $prunedList[0]);
+        $this->assertCount(2, $prunedList);
+        $this->assertNotSame($d0, $prunedList[0]);
+        $this->assertEquals($d0, $prunedList[0]);
+        $this->assertNotSame($d2, $prunedList[1]);
+        $this->assertEquals($d2, $prunedList[1]);
+    }
+
+    public function testFind(): void
+    {
+        $d0 = new DateTimeImmutable('@1234567');
+        $d1 = new DateTimeImmutable('@7654321');
+        $list = new DatetimeList([$d0, $d1]);
+        $this->assertEquals(0, $list->find($d0));
+        $this->assertEquals(1, $list->find($d1));
+    }
+
+    public function testFirst(): void
+    {
+        $d0 = new DateTime;
+        $d1 = new DateTimeImmutable;
+        $list = new DatetimeList([$d0, $d1]);
+        $unwrappedList = $list->unwrap();
+        $this->assertNotSame($d0, $list->first());
+        $this->assertEquals($d0, $list->first());
+        $this->assertNotSame($unwrappedList[0], $list->first());
+        $this->assertEquals($unwrappedList[0], $list->first());
+    }
+
+    public function testLast(): void
+    {
+        $d0 = new DateTime;
+        $d1 = new DateTimeImmutable;
+        $list = new DatetimeList([$d0, $d1]);
+        $unwrappedList = $list->unwrap();
+        $this->assertNotSame($d1, $list->last());
+        $this->assertEquals($d1, $list->last());
+        $this->assertNotSame($unwrappedList[1], $list->last());
+        $this->assertEquals($unwrappedList[1], $list->last());
+    }
+
+    public function testIsEmpty(): void
+    {
+        $list0 = new DatetimeList([new DateTime, new DateTimeImmutable]);
+        $this->assertFalse($list0->isEmpty());
+        $list1 = new DatetimeList;
+        $this->assertTrue($list1->isEmpty());
+        $list2 = new DatetimeList([new DateTime]);
+        $this->assertTrue($list2->without(0)->isEmpty());
+    }
+
+    public function testAppend(): void
+    {
+        $d0 = new DateTime;
+        $d1 = new DateTimeImmutable;
+        $list0 = new DatetimeList([$d0]);
+        $list1 = new DatetimeList([$d1]);
+        $unwrappedList0 = $list0->unwrap();
+        $unwrappedList1 = $list1->unwrap();
+        $appendedList = $list0->append($list1)->unwrap();
+        $this->assertNotSame($unwrappedList0[0], $appendedList[0]);
+        $this->assertEquals($unwrappedList0[0], $appendedList[0]);
+        $this->assertNotSame($unwrappedList1[0], $appendedList[1]);
+        $this->assertEquals($unwrappedList1[0], $appendedList[1]);
+        $this->assertNotSame($list0, $appendedList);
+        $this->assertNotSame($list1, $appendedList);
+        $this->assertCount(2, $appendedList);
+        $this->assertNotSame($d0, $appendedList[0]);
+        $this->assertEquals($d0, $appendedList[0]);
+        $this->assertNotSame($d1, $appendedList[1]);
+        $this->assertEquals($d1, $appendedList[1]);
+    }
+
+    public function testAppendWithInvalidParam(): void
+    {
+        $list = new DatetimeList;
+        $map = new DatetimeMap;
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(28);
+        $this->expectExceptionMessage(
+            'List operation must be on same type as Daikon\Tests\DataStructure\Fixture\DatetimeList'
+        );
+        /** @psalm-suppress InvalidArgument */
+        $list->append($map);
+    } // @codeCoverageIgnore
+
+    public function testPush(): void
+    {
+        $d0 = new DateTime;
+        $d1 = new DateTimeImmutable('@765432');
+        $list = new DatetimeList([$d0]);
+        $setList = $list->push($d1)->unwrap();
+        $this->assertNotSame($d0, $setList[0]);
+        $this->assertEquals($d0, $setList[0]);
+        $this->assertNotSame($d1, $setList[1]);
+        $this->assertEquals($d1, $setList[1]);
+        $this->assertCount(2, $setList);
+    }
+
+    public function testPushInvalidType(): void
+    {
+        $d0 = new DateTime;
+        $list = new DatetimeList([$d0]);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(32);
+        $this->expectExceptionMessage(
+            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeList, '.
+            "expected one of [DateTimeInterface] but was given 'stdClass'"
+        );
+        $list->push(new stdClass);
+    }
+
+    public function testUnshift(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
         $list = new DatetimeList([$d1]);
-        $list = $list->unshift($d0);
-        $this->assertSame($d0, $list->get(0));
-        $this->assertTrue($d0 === $list->get(0));
-        $this->assertSame($d1, $list->get(1));
-        $this->assertTrue($d1 === $list->get(1));
-        $this->assertEquals(2, $list->count());
+        $unwrappedList = $list->unwrap();
+        $unshiftedList = $list->unshift($d0)->unwrap();
+        $this->assertNotSame($unwrappedList[0], $unshiftedList[1]);
+        $this->assertEquals($unwrappedList[0], $unshiftedList[1]);
+        $this->assertCount(2, $unshiftedList);
+        $this->assertNotSame($d0, $unshiftedList[0]);
+        $this->assertEquals($d0, $unshiftedList[0]);
+        $this->assertNotSame($d1, $unshiftedList[1]);
+        $this->assertEquals($d1, $unshiftedList[1]);
     }
 
     public function testUnshiftFailsOnUnacceptableType(): void
@@ -150,86 +297,196 @@ final class TypedListTraitTest extends TestCase
         $d1 = new stdClass;
         $list = new DatetimeList([$d0]);
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(0);
+        $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
-            'Invalid item type given to Daikon\Tests\DataStructure\Fixture\DatetimeList. '.
-            'Expected one of DateTimeInterface but was given stdClass.'
+            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeList, '.
+            "expected one of [DateTimeInterface] but was given 'stdClass'"
         );
-        $list = $list->unshift($d1);
+        $list->unshift($d1);
     } // @codeCoverageIgnore
 
-    public function testReverseWorks(): void
+    public function testReverse(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
         $list = new DatetimeList([$d0, $d1]);
-        $list_reversed = $list->reverse();
-        $this->assertTrue($d0 === $list->get(0));
-        $this->assertTrue($d1 === $list->get(1));
-        $this->assertEquals(2, $list->count());
-        $this->assertTrue($d1 === $list_reversed->get(0));
-        $this->assertSame($d1, $list_reversed->get(0));
-        $this->assertTrue($d0 === $list_reversed->get(1));
-        $this->assertSame($d0, $list_reversed->get(1));
-        $this->assertEquals(2, $list_reversed->count());
+        $unwrappedList = $list->unwrap();
+        $reversedList = $list->reverse()->unwrap();
+        $this->assertNotSame($unwrappedList[0], $reversedList[1]);
+        $this->assertEquals($unwrappedList[0], $reversedList[1]);
+        $this->assertNotSame($d0, $unwrappedList[0]);
+        $this->assertEquals($d0, $unwrappedList[0]);
+        $this->assertNotSame($d1, $unwrappedList[1]);
+        $this->assertEquals($d1, $unwrappedList[1]);
+        $this->assertCount(2, $unwrappedList);
+        $this->assertNotSame($d1, $reversedList[0]);
+        $this->assertEquals($d1, $reversedList[0]);
+        $this->assertNotSame($d0, $reversedList[1]);
+        $this->assertEquals($d0, $reversedList[1]);
+        $this->assertCount(2, $reversedList);
     }
 
-    public function testRemoveWorks(): void
+    public function testReplace(): void
+    {
+        $d0 = new DateTimeImmutable('@1234567');
+        $d1 = new DateTimeImmutable('@7654321');
+        $list = new DatetimeList([$d0]);
+        $replacedList = $list->replace(
+            fn(DateTimeInterface $object): bool => $object->getTimestamp() === 1234567,
+            $d1
+        )->unwrap();
+        $this->assertNotSame($list, $replacedList);
+        $this->assertNotSame($d1, $replacedList[0]);
+        $this->assertEquals($d1, $replacedList[0]);
+        $this->assertCount(1, $replacedList);
+    }
+
+    public function testSort(): void
+    {
+        $d0 = new DateTime('@7654321');
+        $d1 = new DateTimeImmutable('@1234567');
+        $list = new DatetimeList([$d0, $d1]);
+        $unwrappedList = $list->unwrap();
+        $this->assertNotSame($d0, $unwrappedList[0]);
+        $this->assertEquals($d0, $unwrappedList[0]);
+        $this->assertNotSame($d1, $unwrappedList[1]);
+        $this->assertEquals($d1, $unwrappedList[1]);
+        $sortedList = $list->sort(
+            fn(DateTimeInterface $f0, DateTimeInterface $f1): bool => $f0 > $f1
+        )->unwrap();
+        $this->assertNotSame($unwrappedList[1], $sortedList[0]);
+        $this->assertEquals($unwrappedList[1], $sortedList[0]);
+        $this->assertNotSame($unwrappedList[0], $sortedList[1]);
+        $this->assertEquals($unwrappedList[0], $sortedList[1]);
+    }
+
+    public function testFilter(): void
+    {
+        $d0 = new DateTimeImmutable('@7654321');
+        $d1 = new DateTimeImmutable('@1234567');
+        $list = new DatetimeList([$d0, $d1]);
+        $unwrappedList = $list->unwrap();
+        $filteredList = $list->filter(
+            fn(DateTimeInterface $d): bool => $d > new DateTimeImmutable('@4444444')
+        )->unwrap();
+        $this->assertNotSame($unwrappedList[0], $filteredList[0]);
+        $this->assertEquals($unwrappedList[0], $filteredList[0]);
+        $this->assertCount(1, $filteredList);
+        $this->assertNotSame($d0, $filteredList[0]);
+        $this->assertEquals($d0, $filteredList[0]);
+    }
+
+    public function testFilterEmpty(): void
+    {
+        $list = new DatetimeList;
+        $filteredList = $list->filter(fn(): bool => true);
+        $this->assertNotSame($list, $filteredList);
+    }
+
+    public function testSearch(): void
+    {
+        $d1 = new DateTimeImmutable('@1234567');
+        $list = new DatetimeList([new DateTimeImmutable, $d1]);
+        $unwrappedList = $list->unwrap();
+        $this->assertNotSame($d1, $unwrappedList[1]);
+        $this->assertEquals($d1, $unwrappedList[1]);
+        $predicate = fn(DateTimeInterface $object): bool => $d1->getTimestamp() === $object->getTimestamp();
+        $this->assertEquals(1, $list->search($predicate));
+    }
+
+    public function testMap(): void
     {
         $d0 = new DateTimeImmutable;
-        $d1 = new DateTimeImmutable;
-        $d2 = new DateTime;
-        $list = new DatetimeList([$d0, $d1, $d2]);
-        $this->assertSame($d0, $list->get(0));
-        $this->assertSame($d1, $list->get(1));
-        $this->assertSame($d2, $list->get(2));
-        $this->assertEquals(3, $list->count());
-        $list = $list->remove($d1);
-        $this->assertEquals(2, $list->count());
-        $this->assertTrue($d2 === $list->get(1));
-        $this->assertTrue($d0 === $list->get(0));
-    }
-
-    public function testRemoveFailsOnUnacceptableType(): void
-    {
-        $d0 = new DateTime;
-        $list = new DatetimeList([$d0]);
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(0);
-        $this->expectExceptionMessage(
-            'Invalid item type given to Daikon\Tests\DataStructure\Fixture\DatetimeList. '.
-            'Expected one of DateTimeInterface but was given stdClass.'
-        );
-        $list = $list->remove(new stdClass);
-    } // @codeCoverageIgnore
-
-    public function testGetFirstWorks(): void
-    {
-        $d0 = new DateTime;
-        $d1 = new DateTimeImmutable;
+        $d1 = new DateTimeImmutable('@1234567');
         $list = new DatetimeList([$d0, $d1]);
-        $this->assertTrue($d0 === $list->getFirst());
-        $this->assertTrue($list->getFirst() === $list->get(0));
+        $unwrappedList = $list->unwrap();
+        $appliedList = $list->map(fn(DateTimeInterface $item) => $item)->unwrap();
+        $this->assertNotSame($unwrappedList[0], $appliedList[0]);
+        $this->assertEquals($unwrappedList[0], $appliedList[0]);
+        $this->assertCount(2, $appliedList);
+        $this->assertNotSame($d0, $appliedList[0]);
+        $this->assertEquals($d0, $appliedList[0]);
+        $this->assertNotSame($d1, $appliedList[1]);
+        $this->assertEquals($d1, $appliedList[1]);
     }
 
-    public function testGetLastWorks(): void
+    public function testReduce(): void
     {
-        $d0 = new DateTime;
-        $d1 = new DateTimeImmutable;
+        $d0 = new DateTimeImmutable;
+        $d1 = new DateTimeImmutable('@1234567');
         $list = new DatetimeList([$d0, $d1]);
-        $this->assertTrue($d1 === $list->getLast());
-        $this->assertTrue($list->getLast() === $list->get(1));
+        $result = $list->reduce(fn(): bool => true, false);
+        $this->assertTrue($result);
     }
 
-    public function testToNativeWorks(): void
+    public function testGetValidTypes(): void
+    {
+        $this->assertEquals([DateTimeInterface::class], (new DatetimeList)->getValidTypes());
+    }
+
+    public function testunwrap(): void
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
         $a = [$d0, $d1];
         $list = new DatetimeList($a);
-        $b = $list->toNative();
-        $this->assertTrue($a === $b);
-        $this->assertTrue($a[0] === $b[0]);
-        $this->assertTrue($a[1] === $b[1]);
+        $b = $list->unwrap();
+        $this->assertNotSame($a, $b);
+        $this->assertEquals($a, $b);
+        $this->assertNotSame($a[0], $b[0]);
+        $this->assertEquals($a[0], $b[0]);
+        $this->assertNotSame($a[1], $b[1]);
+        $this->assertEquals($a[1], $b[1]);
+    }
+
+    public function testIterator(): void
+    {
+        $d0 = new DateTime;
+        $d1 = new DateTimeImmutable;
+        $state = [$d0, $d1];
+        $list = new DatetimeList($state);
+        $unwrappedList = $list->unwrap();
+        foreach ($list as $index => $current) {
+            $this->assertNotSame($unwrappedList[$index], $current);
+            $this->assertEquals($unwrappedList[$index], $current);
+            $this->assertNotSame($state[$index], $current);
+            $this->assertEquals($state[$index], $current);
+        }
+    }
+
+    public function testImplicitGet(): void
+    {
+        $d1 = new DateTime;
+        $d2 = new DateTimeImmutable;
+        $map = new DatetimeList([$d1, $d2]);
+        $this->assertNotSame($d1, $map->{0});
+        $this->assertEquals($d1, $map->{0});
+        $this->assertNotSame($d2, $map->{1});
+        $this->assertEquals($d2, $map->{1});
+    }
+
+    public function testCount(): void
+    {
+        $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
+        $this->assertCount(2, $list);
+    }
+
+    public function testClone(): void
+    {
+        $d0 = new DateTime;
+        $d1 = new DateTimeImmutable;
+        $t0 = new stdClass;
+        $a = [$d0, $d1];
+        $list = new DatetimeList($a, $t0);
+        $unwappedList = $list->unwrap();
+        $clonedList = clone $list;
+        $unwappedClone = $clonedList->unwrap();
+        $this->assertSame($list->getValidTypes(), $clonedList->getValidTypes());
+        $this->assertNotSame($list->getIterator(), $clonedList->getIterator());
+        $this->assertEquals($list->getIterator(), $clonedList->getIterator());
+        $this->assertNotSame($unwappedList[0], $unwappedClone[0]);
+        $this->assertEquals($unwappedList[0], $unwappedClone[0]);
+        $this->assertNotSame($t0, $clonedList->getTestVar());
+        $this->assertEquals($t0, $clonedList->getTestVar());
     }
 }

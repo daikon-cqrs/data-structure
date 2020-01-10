@@ -8,23 +8,22 @@
 
 namespace Daikon\Tests\DataStructure\Fixture;
 
-use Daikon\DataStructure\TypedListInterface;
-use Daikon\DataStructure\TypedListTrait;
-use DateTimeInterface;
+use Daikon\DataStructure\MapInterface;
+use Daikon\DataStructure\MapTrait;
 use stdClass;
 
-final class DatetimeList implements TypedListInterface
+final class PlainMap implements MapInterface
 {
-    use TypedListTrait {
-        __clone as __listclone;
+    use MapTrait {
+        __clone as __mapclone;
     }
 
     private stdClass $testVar;
 
-    public function __construct(iterable $datetimes = [], stdClass $testVar = null)
+    public function __construct(iterable $values = [], stdClass $testVar = null)
     {
         $this->testVar = $testVar ?? new stdClass;
-        $this->init($datetimes, [DatetimeInterface::class]);
+        $this->init($values);
     }
 
     public function getTestVar(): stdClass
@@ -34,7 +33,7 @@ final class DatetimeList implements TypedListInterface
 
     public function __clone()
     {
-        $this->__listclone();
+        $this->__mapclone();
         $this->testVar = clone $this->testVar;
     }
 }

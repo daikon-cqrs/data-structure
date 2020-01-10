@@ -8,17 +8,33 @@
 
 namespace Daikon\Tests\DataStructure\Fixture;
 
-use Countable;
+use Daikon\DataStructure\TypedMapInterface;
 use Daikon\DataStructure\TypedMapTrait;
 use DateTimeInterface;
-use IteratorAggregate;
+use stdClass;
 
-final class DatetimeMap implements IteratorAggregate, Countable
+final class DatetimeMap implements TypedMapInterface
 {
-    use TypedMapTrait;
+    use TypedMapTrait {
+        __clone as __mapclone;
+    }
 
-    public function __construct(array $datetimes = [])
+    private stdClass $testVar;
+
+    public function __construct(iterable $datetimes = [], stdClass $testVar = null)
     {
-        $this->init($datetimes, DatetimeInterface::class);
+        $this->testVar = $testVar ?? new stdClass;
+        $this->init($datetimes, [DatetimeInterface::class]);
+    }
+
+    public function getTestVar(): stdClass
+    {
+        return $this->testVar;
+    }
+
+    public function __clone()
+    {
+        $this->__mapclone();
+        $this->testVar = clone $this->testVar;
     }
 }

@@ -2,13 +2,14 @@
     "name": "daikon/data-structure",
     "type": "library",
     "description": "Immutable data-structure traits based on php/ds.",
-    "keywords": [ "list", "map", "data-structures", "immutable" ],
-    "homepage": "https://github.com/daikon-cqrs/data-structures",
+    "keywords": [ "list", "map", "vector", "data-structure", "immutable" ],
+    "homepage": "https://github.com/daikon-cqrs/data-structure",
     "license": "MPL-2.0",
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.2",
+        "php": "^7.4",
+        "beberlei/assert": "^3.0",
         "php-ds/php-ds": "^1.2"
     },
     "require-dev": {
@@ -31,9 +32,9 @@
     },
     "scripts": {
         "build": [ "@sniff", "@tests" ],
-        "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' src/ tests/",
-        "code-sniffer-autofix": "phpcbf --standard=PSR2 -d tabWidth=4 src/ tests/",
-        "copy-paste-detector": "phpcpd src/ tests/ || true",
+        "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' src tests",
+        "code-sniffer-autofix": "phpcbf --standard=PSR2 -d tabWidth=4 src tests",
+        "copy-paste-detector": "phpcpd src tests || true",
         "sniff": [
             "@code-sniffer",
             "@copy-paste-detector",
