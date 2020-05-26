@@ -202,6 +202,7 @@ trait TypedListTrait
     public function reduce(callable $predicate, $initial = null)
     {
         $this->assertInitialized();
+        /** @psalm-suppress PossiblyNullArgument */
         return $this->compositeVector->reduce($predicate, $initial);
     }
 
@@ -226,6 +227,7 @@ trait TypedListTrait
         return $this->compositeVector->count();
     }
 
+    /** @psalm-suppress ImplementedReturnTypeMismatch */
     public function getIterator(): Vector
     {
         $this->assertInitialized();
@@ -235,6 +237,7 @@ trait TypedListTrait
 
     private function assertInitialized(): void
     {
+        /** @psalm-suppress TypeDoesNotContainType */
         if (!isset($this->compositeVector)) {
             throw new RuntimeException('List is not initialized');
         }

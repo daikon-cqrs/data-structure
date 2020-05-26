@@ -201,6 +201,7 @@ trait TypedMapTrait
         return $this->compositeMap->toArray();
     }
 
+    /** @psalm-suppress ImplementedReturnTypeMismatch */
     public function getIterator(): Map
     {
         $this->assertInitialized();
@@ -234,6 +235,7 @@ trait TypedMapTrait
 
     private function assertInitialized(): void
     {
+        /** @psalm-suppress TypeDoesNotContainType */
         if (!isset($this->compositeMap)) {
             throw new RuntimeException('Map is not initialized');
         }

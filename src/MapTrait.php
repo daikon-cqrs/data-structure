@@ -113,6 +113,7 @@ trait MapTrait
         return $this->compositeMap->toArray();
     }
 
+    /** @psalm-suppress ImplementedReturnTypeMismatch */
     public function getIterator(): Map
     {
         return $this->compositeMap;
@@ -120,6 +121,7 @@ trait MapTrait
 
     private function assertInitialized(): void
     {
+        /** @psalm-suppress TypeDoesNotContainType */
         if (!isset($this->compositeMap)) {
             throw new RuntimeException('Map is not initialized');
         }
