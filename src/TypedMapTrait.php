@@ -9,8 +9,8 @@
 namespace Daikon\DataStructure;
 
 use Assert\Assert;
+use Daikon\Interop\RuntimeException;
 use Ds\Map;
-use RuntimeException;
 
 trait TypedMapTrait
 {

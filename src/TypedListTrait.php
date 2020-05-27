@@ -9,9 +9,9 @@
 namespace Daikon\DataStructure;
 
 use Assert\Assert;
+use Daikon\Interop\RuntimeException;
 use Ds\Vector;
 use OutOfRangeException;
-use RuntimeException;
 
 trait TypedListTrait
 {
