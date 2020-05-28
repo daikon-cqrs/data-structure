@@ -22,11 +22,11 @@ trait TypedMapTrait
     /** @param string[] $validTypes */
     private function init(iterable $objects, array $validTypes): void
     {
-        if (isset($this->compositeVector)) {
-            throw new RuntimeException('Cannot reinitialize map');
+        if (isset($this->compositeMap)) {
+            throw new RuntimeException('Cannot reinitialize map.');
         }
 
-        Assert::thatAll($validTypes, 'Invalid map types')->string()->notEmpty();
+        Assert::thatAll($validTypes, 'Invalid map types.')->string()->notEmpty();
         $this->validTypes = $validTypes;
         $this->compositeMap = new Map;
 
@@ -55,7 +55,7 @@ trait TypedMapTrait
         $this->assertInitialized();
         $this->assertValidKey($key);
         if (func_num_args() === 1) {
-            Assert::that($this->has($key))->true("Key '$key' not found and no default provided");
+            Assert::that($this->has($key))->true("Key '$key' not found and no default provided.");
             return clone (object)$this->compositeMap->get($key);
         } else {
             if (!is_null($default)) {
@@ -79,13 +79,13 @@ trait TypedMapTrait
     public function without(string $key): self
     {
         $this->assertInitialized();
-        Assert::that($this->has($key))->true("Key '$key' not found");
+        Assert::that($this->has($key))->true("Key '$key' not found.");
         $copy = clone $this;
         $copy->compositeMap->remove($key);
         return $copy;
     }
 
-/**
+    /**
      * Note that this does not do a strict equality check because all objects are immutable so it's
      * unlikely that you will request a reference to an internal object. If you require more specific
      * matching use search(), filter(), unwrap object, or iterate.
@@ -237,14 +237,14 @@ trait TypedMapTrait
     {
         /** @psalm-suppress TypeDoesNotContainType */
         if (!isset($this->compositeMap)) {
-            throw new RuntimeException('Map is not initialized');
+            throw new RuntimeException('Map is not initialized.');
         }
     }
 
     /** @param mixed $key */
     private function assertValidKey($key): void
     {
-        Assert::that($key, 'Key must be a valid string')->string()->notEmpty();
+        Assert::that($key, 'Key must be a valid string.')->string()->notEmpty();
     }
 
     /** @param mixed $object */
@@ -252,7 +252,7 @@ trait TypedMapTrait
     {
         Assert::thatAll(
             $this->validTypes,
-            'Object types specified in '.static::class.' must be valid class or interface names'
+            'Object types specified in '.static::class.' must be valid class or interface names.'
         )->string()
         ->notEmpty();
 
@@ -263,7 +263,7 @@ trait TypedMapTrait
         );
 
         Assert::that($objectIsValid)->true(sprintf(
-            "Invalid object type given to %s, expected one of [%s] but was given '%s'",
+            "Invalid object type given to %s, expected one of [%s] but was given '%s'.",
             static::class,
             implode(', ', $this->validTypes),
             is_object($object) ? get_class($object) : @gettype($object)

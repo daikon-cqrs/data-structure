@@ -18,8 +18,8 @@ trait MapTrait
 
     private function init(iterable $values): void
     {
-        if (isset($this->compositeVector)) {
-            throw new RuntimeException('Cannot reinitialize map');
+        if (isset($this->compositeMap)) {
+            throw new RuntimeException('Cannot reinitialize map.');
         }
 
         foreach ($values as $key => $value) {
@@ -46,7 +46,7 @@ trait MapTrait
     {
         $this->assertInitialized();
         if (func_num_args() === 1) {
-            Assert::that($this->has($key))->true("Key '$key' not found and no default provided");
+            Assert::that($this->has($key))->true("Key '$key' not found and no default provided.");
             return $this->compositeMap->get($key);
         } else {
             if (!is_null($default)) {
@@ -68,7 +68,7 @@ trait MapTrait
     public function without(string $key): self
     {
         $this->assertInitialized();
-        Assert::that($this->has($key))->true("Key '$key' not found");
+        Assert::that($this->has($key))->true("Key '$key' not found.");
         $copy = clone $this;
         $copy->compositeMap->remove($key);
         return $copy;
@@ -123,14 +123,14 @@ trait MapTrait
     {
         /** @psalm-suppress TypeDoesNotContainType */
         if (!isset($this->compositeMap)) {
-            throw new RuntimeException('Map is not initialized');
+            throw new RuntimeException('Map is not initialized.');
         }
     }
 
     /** @param mixed $key */
     private function assertValidKey($key): void
     {
-        Assert::that($key, 'Key must be a valid string')->string()->notEmpty();
+        Assert::that($key, 'Key must be a valid string.')->string()->notEmpty();
     }
 
     /** @param mixed $value */
@@ -139,7 +139,7 @@ trait MapTrait
         $valueIsValid = is_array($value) || is_scalar($value);
 
         Assert::that($valueIsValid)->true(sprintf(
-            "Invalid value type given to %s, expected scalar or array but was given '%s'",
+            "Invalid value type given to %s, expected scalar or array but was given '%s'.",
             static::class,
             is_object($value) ? get_class($value) : @gettype($value)
         ));

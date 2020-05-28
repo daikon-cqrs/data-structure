@@ -24,10 +24,10 @@ trait TypedListTrait
     private function init(iterable $objects, array $validTypes): void
     {
         if (isset($this->compositeVector)) {
-            throw new RuntimeException('Cannot reinitialize list');
+            throw new RuntimeException('Cannot reinitialize list.');
         }
 
-        Assert::thatAll($validTypes, 'Invalid list types')->string()->notEmpty();
+        Assert::thatAll($validTypes, 'Invalid list types.')->string()->notEmpty();
         $this->validTypes = $validTypes;
         $this->compositeVector = new Vector;
 
@@ -54,7 +54,7 @@ trait TypedListTrait
     {
         $this->assertInitialized();
         if (func_num_args() === 1) {
-            Assert::that($this->has($index))->true("Index $index not found and no default provided");
+            Assert::that($this->has($index))->true("Index $index not found and no default provided.");
             return clone $this->compositeVector->get($index);
         } else {
             if (!is_null($default)) {
@@ -71,7 +71,7 @@ trait TypedListTrait
     {
         $this->assertInitialized();
         $this->assertValidType($object);
-        Assert::that($this->has($index))->true("Index $index not found");
+        Assert::that($this->has($index))->true("Index $index not found.");
         $copy = clone $this;
         $copy->compositeVector->set($index, clone $object);
         return $copy;
@@ -239,7 +239,7 @@ trait TypedListTrait
     {
         /** @psalm-suppress TypeDoesNotContainType */
         if (!isset($this->compositeVector)) {
-            throw new RuntimeException('List is not initialized');
+            throw new RuntimeException('List is not initialized.');
         }
     }
 
@@ -255,7 +255,7 @@ trait TypedListTrait
     /** @param mixed $index */
     private function assertValidIndex($index): void
     {
-        Assert::that($index)->integerish('Index must be a valid integer');
+        Assert::that($index)->integerish('Index must be a valid integer.');
     }
 
     /** @param mixed $object */
@@ -263,7 +263,7 @@ trait TypedListTrait
     {
         Assert::thatAll(
             $this->validTypes,
-            'Object types specified in '.static::class.' must be valid class or interface names'
+            'Object types specified in '.static::class.' must be valid class or interface names.'
         )->string()
         ->notEmpty();
 
@@ -274,7 +274,7 @@ trait TypedListTrait
         );
 
         Assert::that($objectIsValid)->true(sprintf(
-            "Invalid object type given to %s, expected one of [%s] but was given '%s'",
+            "Invalid object type given to %s, expected one of [%s] but was given '%s'.",
             static::class,
             implode(', ', $this->validTypes),
             is_object($object) ? get_class($object) : @gettype($object)
