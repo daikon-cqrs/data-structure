@@ -47,7 +47,7 @@ final class TypedListTraitTest extends TestCase
         $this->expectExceptionCode(12);
         $this->expectExceptionMessage('Index must be a valid integer');
         new DatetimeList(['a' => $d0]);
-    } // @codeCoverageIgnore
+    }
 
     public function testHas(): void
     {
@@ -105,7 +105,7 @@ final class TypedListTraitTest extends TestCase
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage("Index 1 not found and no default provided");
         $list->get(1);
-    } // @codeCoverageIgnore
+    }
 
     public function testGetWithInvalidIndex(): void
     {
@@ -115,7 +115,7 @@ final class TypedListTraitTest extends TestCase
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage("Index 1 not found");
         $list->get(1);
-    } // @codeCoverageIgnore
+    }
 
     public function testWith(): void
     {
@@ -151,7 +151,7 @@ final class TypedListTraitTest extends TestCase
             "expected one of [DateTimeInterface] but was given 'stdClass'"
         );
         $list->with(0, $d1);
-    } // @codeCoverageIgnore
+    }
 
     public function testWithout(): void
     {
@@ -247,7 +247,7 @@ final class TypedListTraitTest extends TestCase
         );
         /** @psalm-suppress InvalidArgument */
         $list->append($map);
-    } // @codeCoverageIgnore
+    }
 
     public function testPush(): void
     {
@@ -303,7 +303,7 @@ final class TypedListTraitTest extends TestCase
             "expected one of [DateTimeInterface] but was given 'stdClass'"
         );
         $list->unshift($d1);
-    } // @codeCoverageIgnore
+    }
 
     public function testReverse(): void
     {

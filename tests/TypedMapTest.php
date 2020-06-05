@@ -45,7 +45,7 @@ final class TypedMapTest extends TestCase
         $this->expectExceptionCode(16);
         $this->expectExceptionMessage('Key must be a valid string');
         new DatetimeMap(['1337' => new DateTime]);
-    } // @codeCoverageIgnore
+    }
 
     public function testConstructFailsOnInvalidIndex(): void
     {
@@ -54,7 +54,7 @@ final class TypedMapTest extends TestCase
         $this->expectExceptionCode(16);
         $this->expectExceptionMessage('Key must be a valid string');
         new DatetimeMap([123 => $d0]);
-    } // @codeCoverageIgnore
+    }
 
     public function testKeys(): void
     {
@@ -118,7 +118,7 @@ final class TypedMapTest extends TestCase
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage("Key 'x' not found and no default provided");
         $map->get('x');
-    } // @codeCoverageIgnore
+    }
 
     public function testGetThrowsForInternalProperties(): void
     {
@@ -126,7 +126,7 @@ final class TypedMapTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(32);
         $map->validTypes;
-    } // @codeCoverageIgnore
+    }
 
     public function testWith(): void
     {
@@ -153,7 +153,7 @@ final class TypedMapTest extends TestCase
             "expected one of [DateTimeInterface] but was given 'stdClass'"
         );
         $map->with('b', $d1);
-    } // @codeCoverageIgnore
+    }
 
     public function testWithout(): void
     {
@@ -182,7 +182,7 @@ final class TypedMapTest extends TestCase
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage("Key 'c' not found");
         $map->without('c');
-    } // @codeCoverageIgnore
+    }
 
     public function testFind(): void
     {
@@ -257,7 +257,7 @@ final class TypedMapTest extends TestCase
         );
         /** @psalm-suppress InvalidArgument */
         $map->merge($list);
-    } // @codeCoverageIgnore
+    }
 
     public function testIntersect(): void
     {
@@ -286,7 +286,7 @@ final class TypedMapTest extends TestCase
         );
         /** @psalm-suppress InvalidArgument */
         $map->intersect($list);
-    } // @codeCoverageIgnore
+    }
 
     public function testDiff(): void
     {
@@ -315,7 +315,7 @@ final class TypedMapTest extends TestCase
         );
         /** @psalm-suppress InvalidArgument */
         $map->diff($list);
-    } // @codeCoverageIgnore
+    }
 
     public function testFilter(): void
     {
