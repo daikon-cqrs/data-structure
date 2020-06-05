@@ -6,14 +6,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Daikon\Tests\DataStructure\Fixture;
+namespace Daikon\DataStructure;
 
-use Daikon\DataStructure\Map;
-
-final class PlainMap extends Map
+abstract class Map implements MapInterface
 {
-    public function __construct(iterable $values = [])
-    {
-        $this->init($values);
-    }
+    use MapTrait;
 }

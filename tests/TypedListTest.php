@@ -475,18 +475,15 @@ final class TypedListTraitTest extends TestCase
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
-        $t0 = new stdClass;
         $a = [$d0, $d1];
-        $list = new DatetimeList($a, $t0);
-        $unwappedList = $list->unwrap();
+        $list = new DatetimeList($a);
+        $unwrappedList = $list->unwrap();
         $clonedList = clone $list;
-        $unwappedClone = $clonedList->unwrap();
+        $unwrappedClone = $clonedList->unwrap();
         $this->assertSame($list->getValidTypes(), $clonedList->getValidTypes());
         $this->assertNotSame($list->getIterator(), $clonedList->getIterator());
         $this->assertEquals($list->getIterator(), $clonedList->getIterator());
-        $this->assertNotSame($unwappedList[0], $unwappedClone[0]);
-        $this->assertEquals($unwappedList[0], $unwappedClone[0]);
-        $this->assertNotSame($t0, $clonedList->getTestVar());
-        $this->assertEquals($t0, $clonedList->getTestVar());
+        $this->assertNotSame($unwrappedList[0], $unwrappedClone[0]);
+        $this->assertEquals($unwrappedList[0], $unwrappedClone[0]);
     }
 }

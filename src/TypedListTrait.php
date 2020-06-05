@@ -15,13 +15,13 @@ use OutOfRangeException;
 
 trait TypedListTrait
 {
-    private Vector $compositeVector;
+    protected Vector $compositeVector;
 
     /** @param string[] $validTypes */
-    private array $validTypes = [];
+    protected array $validTypes = [];
 
     /** @param string[] $validTypes */
-    private function init(iterable $objects, array $validTypes): void
+    protected function init(iterable $objects, array $validTypes): void
     {
         if (isset($this->compositeVector)) {
             throw new RuntimeException('Cannot reinitialize list.');
@@ -34,6 +34,7 @@ trait TypedListTrait
         foreach ($objects as $index => $object) {
             $this->assertValidIndex($index);
             $this->assertValidType($object);
+            /** @psalm-suppress MixedClone */
             $this->compositeVector->push(clone $object);
         }
     }
@@ -55,6 +56,7 @@ trait TypedListTrait
         $this->assertInitialized();
         if (func_num_args() === 1) {
             Assert::that($this->has($index))->true("Index $index not found and no default provided.");
+            /** @psalm-suppress MixedClone */
             return clone $this->compositeVector->get($index);
         } else {
             if (!is_null($default)) {
@@ -63,6 +65,7 @@ trait TypedListTrait
             $object = $this->has($index)
                 ? $this->compositeVector->get($index)
                 : $default;
+            /** @psalm-suppress MixedClone */
             return is_null($object) ? null : clone $object;
         }
     }
@@ -100,12 +103,14 @@ trait TypedListTrait
     public function first(): object
     {
         $this->assertInitialized();
+        /** @psalm-suppress MixedClone */
         return clone $this->compositeVector->first();
     }
 
     public function last(): object
     {
         $this->assertInitialized();
+        /** @psalm-suppress MixedClone */
         return clone $this->compositeVector->last();
     }
 
@@ -160,6 +165,7 @@ trait TypedListTrait
         foreach ($this as $object) {
             $objects[] = $predicate($object) === true ? $replacement : $object;
         }
+        /** @psalm-suppress TooManyArguments */
         return new static($objects);
     }
 
@@ -235,7 +241,7 @@ trait TypedListTrait
         return $copy->compositeVector;
     }
 
-    private function assertInitialized(): void
+    protected function assertInitialized(): void
     {
         /** @psalm-suppress TypeDoesNotContainType */
         if (!isset($this->compositeVector)) {
@@ -244,7 +250,7 @@ trait TypedListTrait
     }
 
     /** @param mixed $list */
-    private function assertValidList($list): void
+    protected function assertValidList($list): void
     {
         Assert::that($list)->isInstanceOf(
             static::class,
@@ -253,13 +259,13 @@ trait TypedListTrait
     }
 
     /** @param mixed $index */
-    private function assertValidIndex($index): void
+    protected function assertValidIndex($index): void
     {
         Assert::that($index)->integerish('Index must be a valid integer.');
     }
 
     /** @param mixed $object */
-    private function assertValidType($object): void
+    protected function assertValidType($object): void
     {
         Assert::thatAll(
             $this->validTypes,

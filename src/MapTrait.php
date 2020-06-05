@@ -14,9 +14,9 @@ use Ds\Map;
 
 trait MapTrait
 {
-    private Map $compositeMap;
+    protected Map $compositeMap;
 
-    private function init(iterable $values): void
+    protected function init(iterable $values): void
     {
         if (isset($this->compositeMap)) {
             throw new RuntimeException('Cannot reinitialize map.');
@@ -119,7 +119,7 @@ trait MapTrait
         return $this->compositeMap;
     }
 
-    private function assertInitialized(): void
+    protected function assertInitialized(): void
     {
         /** @psalm-suppress TypeDoesNotContainType */
         if (!isset($this->compositeMap)) {
@@ -128,13 +128,13 @@ trait MapTrait
     }
 
     /** @param mixed $key */
-    private function assertValidKey($key): void
+    protected function assertValidKey($key): void
     {
         Assert::that($key, 'Key must be a valid string.')->string()->notEmpty();
     }
 
     /** @param mixed $value */
-    private function assertValidType($value): void
+    protected function assertValidType($value): void
     {
         $valueIsValid = is_array($value) || is_scalar($value);
 
@@ -146,7 +146,7 @@ trait MapTrait
     }
 
     /** @param mixed $map */
-    private function assertValidMap($map): void
+    protected function assertValidMap($map): void
     {
         Assert::that($map)->isInstanceOf(
             static::class,

@@ -8,33 +8,13 @@
 
 namespace Daikon\Tests\DataStructure\Fixture;
 
-use Daikon\DataStructure\TypedListInterface;
-use Daikon\DataStructure\TypedListTrait;
+use Daikon\DataStructure\TypedList;
 use DateTimeInterface;
-use stdClass;
 
-final class DatetimeList implements TypedListInterface
+final class DatetimeList extends TypedList
 {
-    use TypedListTrait {
-        __clone as __listclone;
-    }
-
-    private stdClass $testVar;
-
-    public function __construct(iterable $datetimes = [], stdClass $testVar = null)
+    public function __construct(iterable $datetimes = [])
     {
-        $this->testVar = $testVar ?? new stdClass;
         $this->init($datetimes, [DatetimeInterface::class]);
-    }
-
-    public function getTestVar(): stdClass
-    {
-        return $this->testVar;
-    }
-
-    public function __clone()
-    {
-        $this->__listclone();
-        $this->testVar = clone $this->testVar;
     }
 }

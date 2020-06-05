@@ -14,13 +14,13 @@ use Ds\Map;
 
 trait TypedMapTrait
 {
-    private Map $compositeMap;
+    protected Map $compositeMap;
 
     /** @var string[] */
-    private array $validTypes = [];
+    protected array $validTypes = [];
 
     /** @param string[] $validTypes */
-    private function init(iterable $objects, array $validTypes): void
+    protected function init(iterable $objects, array $validTypes): void
     {
         if (isset($this->compositeMap)) {
             throw new RuntimeException('Cannot reinitialize map.');
@@ -33,6 +33,7 @@ trait TypedMapTrait
         foreach ($objects as $key => $object) {
             $this->assertValidKey($key);
             $this->assertValidType($object);
+            /** @psalm-suppress MixedClone */
             $this->compositeMap->put($key, clone $object);
         }
     }
@@ -56,12 +57,14 @@ trait TypedMapTrait
         $this->assertValidKey($key);
         if (func_num_args() === 1) {
             Assert::that($this->has($key))->true("Key '$key' not found and no default provided.");
-            return clone (object)$this->compositeMap->get($key);
+            /** @psalm-suppress MixedClone */
+            return clone $this->compositeMap->get($key);
         } else {
             if (!is_null($default)) {
                 $this->assertValidType($default);
             }
             $object = $this->compositeMap->get($key, $default);
+            /** @psalm-suppress MixedClone */
             return is_null($object) ? null : clone $object;
         }
     }
@@ -100,14 +103,20 @@ trait TypedMapTrait
     public function first(): object
     {
         $this->assertInitialized();
-        /** @psalm-suppress MissingPropertyType */
+        /**
+         * @psalm-suppress MissingPropertyType
+         * @psalm-suppress MixedClone
+         */
         return clone $this->compositeMap->first()->value;
     }
 
     public function last(): object
     {
         $this->assertInitialized();
-        /** @psalm-suppress MissingPropertyType */
+        /**
+         * @psalm-suppress MissingPropertyType
+         * @psalm-suppress MixedClone
+         */
         return clone $this->compositeMap->last()->value;
     }
 
@@ -209,23 +218,8 @@ trait TypedMapTrait
         return $copy->compositeMap;
     }
 
-    public function __get(string $key): ?object
-    {
-        return $this->get($key);
-    }
-
-    public function __clone()
-    {
-        $this->assertInitialized();
-        $this->compositeMap = new Map(array_map(
-            /** @return mixed */
-            fn(object $object) => clone $object,
-            $this->compositeMap->toArray()
-        ));
-    }
-
     /** @param mixed $map */
-    private function assertValidMap($map): void
+    protected function assertValidMap($map): void
     {
         Assert::that($map)->isInstanceOf(
             static::class,
@@ -233,7 +227,7 @@ trait TypedMapTrait
         );
     }
 
-    private function assertInitialized(): void
+    protected function assertInitialized(): void
     {
         /** @psalm-suppress TypeDoesNotContainType */
         if (!isset($this->compositeMap)) {
@@ -242,13 +236,13 @@ trait TypedMapTrait
     }
 
     /** @param mixed $key */
-    private function assertValidKey($key): void
+    protected function assertValidKey($key): void
     {
         Assert::that($key, 'Key must be a valid string.')->string()->notEmpty();
     }
 
     /** @param mixed $object */
-    private function assertValidType($object): void
+    protected function assertValidType($object): void
     {
         Assert::thatAll(
             $this->validTypes,
@@ -267,6 +261,21 @@ trait TypedMapTrait
             static::class,
             implode(', ', $this->validTypes),
             is_object($object) ? get_class($object) : @gettype($object)
+        ));
+    }
+
+    public function __get(string $key): ?object
+    {
+        return $this->get($key);
+    }
+
+    public function __clone()
+    {
+        $this->assertInitialized();
+        $this->compositeMap = new Map(array_map(
+            /** @return mixed */
+            fn(object $object) => clone $object,
+            $this->compositeMap->toArray()
         ));
     }
 }

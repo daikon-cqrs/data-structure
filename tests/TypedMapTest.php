@@ -17,7 +17,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-final class TypedMapTraitTest extends TestCase
+final class TypedMapTest extends TestCase
 {
     public function testConstructWithoutParams(): void
     {
@@ -440,9 +440,8 @@ final class TypedMapTraitTest extends TestCase
     {
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
-        $t0 = new stdClass;
         $a = ['a' => $d0, 'b' => $d1];
-        $map = new DatetimeMap($a, $t0);
+        $map = new DatetimeMap($a);
         $unwrappedMap = $map->unwrap();
         $clonedMap = clone $map;
         $unwrappedClone = $clonedMap->unwrap();
@@ -451,7 +450,5 @@ final class TypedMapTraitTest extends TestCase
         $this->assertEquals($map->getIterator(), $clonedMap->getIterator());
         $this->assertNotSame($unwrappedMap['a'], $unwrappedClone['a']);
         $this->assertEquals($unwrappedMap['a'], $unwrappedClone['a']);
-        $this->assertNotSame($t0, $clonedMap->getTestVar());
-        $this->assertEquals($t0, $clonedMap->getTestVar());
     }
 }
