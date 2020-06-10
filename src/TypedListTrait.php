@@ -17,7 +17,6 @@ trait TypedListTrait
 {
     protected Vector $compositeVector;
 
-    /** @param string[] $validTypes */
     protected array $validTypes = [];
 
     /** @param string[] $validTypes */
@@ -41,7 +40,6 @@ trait TypedListTrait
     {
         $this->assertInitialized();
         try {
-            //@todo maybe a better way to do this
             $this->compositeVector->get($index);
             return true;
         } catch (OutOfRangeException $error) {

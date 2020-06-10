@@ -16,7 +16,6 @@ trait TypedMapTrait
 {
     protected Map $compositeMap;
 
-    /** @var string[] */
     protected array $validTypes = [];
 
     /** @param string[] $validTypes */
