@@ -8,8 +8,8 @@
 
 namespace Daikon\DataStructure;
 
-use Assert\Assert;
-use Daikon\Interop\RuntimeException;
+use Daikon\Interop\Assert;
+use Daikon\Interop\Assertion;
 use Ds\Vector;
 use OutOfRangeException;
 
@@ -23,11 +23,9 @@ trait TypedListTrait
     /** @param string[] $validTypes */
     protected function init(iterable $objects, array $validTypes): void
     {
-        if (isset($this->compositeVector)) {
-            throw new RuntimeException('Cannot reinitialize list.');
-        }
-
+        Assertion::false(isset($this->compositeVector), 'Cannot reinitialize map.');
         Assert::thatAll($validTypes, 'Invalid list types.')->string()->notEmpty();
+
         $this->validTypes = $validTypes;
         $this->compositeVector = new Vector;
 
@@ -55,7 +53,7 @@ trait TypedListTrait
     {
         $this->assertInitialized();
         if (func_num_args() === 1) {
-            Assert::that($this->has($index))->true("Index $index not found and no default provided.");
+            Assertion::satisfy($index, [$this, 'has'], "Index $index not found and no default provided.");
             /** @psalm-suppress MixedClone */
             return clone $this->compositeVector->get($index);
         } else {
@@ -74,7 +72,7 @@ trait TypedListTrait
     {
         $this->assertInitialized();
         $this->assertValidType($object);
-        Assert::that($this->has($index))->true("Index $index not found.");
+        Assertion::satisfy($index, [$this, 'has'], "Index $index not found.");
         $copy = clone $this;
         $copy->compositeVector->set($index, clone $object);
         return $copy;
@@ -243,25 +241,23 @@ trait TypedListTrait
 
     protected function assertInitialized(): void
     {
-        /** @psalm-suppress TypeDoesNotContainType */
-        if (!isset($this->compositeVector)) {
-            throw new RuntimeException('List is not initialized.');
-        }
+        Assertion::true(isset($this->compositeVector), 'List is not initialized.');
     }
 
     /** @param mixed $list */
     protected function assertValidList($list): void
     {
-        Assert::that($list)->isInstanceOf(
+        Assertion::isInstanceOf(
+            $list,
             static::class,
-            'List operation must be on same type as '.static::class
+            sprintf("List operation must be on same type as '%s'.", static::class)
         );
     }
 
     /** @param mixed $index */
     protected function assertValidIndex($index): void
     {
-        Assert::that($index)->integerish('Index must be a valid integer.');
+        Assertion::integerish($index, 'Index must be a valid integer.');
     }
 
     /** @param mixed $object */
@@ -269,22 +265,23 @@ trait TypedListTrait
     {
         Assert::thatAll(
             $this->validTypes,
-            'Object types specified in '.static::class.' must be valid class or interface names.'
+            sprintf("Object types specified in '%s' must be valid class or interface names.", static::class)
         )->string()
         ->notEmpty();
 
-        $objectIsValid = array_reduce(
-            $this->validTypes,
-            fn(bool $carry, string $type): bool => $carry || is_a($object, $type, true),
-            false
+        Assertion::true(
+            array_reduce(
+                $this->validTypes,
+                fn(bool $carry, string $type): bool => $carry || is_a($object, $type, true),
+                false
+            ),
+            sprintf(
+                "Invalid object type given to '%s', expected one of [%s] but was given '%s'.",
+                static::class,
+                implode(', ', $this->validTypes),
+                is_object($object) ? get_class($object) : @gettype($object)
+            )
         );
-
-        Assert::that($objectIsValid)->true(sprintf(
-            "Invalid object type given to %s, expected one of [%s] but was given '%s'.",
-            static::class,
-            implode(', ', $this->validTypes),
-            is_object($object) ? get_class($object) : @gettype($object)
-        ));
     }
 
     public function __get(int $index): ?object
@@ -296,8 +293,7 @@ trait TypedListTrait
     {
         $this->assertInitialized();
         $this->compositeVector = new Vector(array_map(
-            /** @return mixed */
-            fn(object $object) => clone $object,
+            fn(object $object): object => clone $object,
             $this->compositeVector->toArray()
         ));
     }

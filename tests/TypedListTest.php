@@ -8,16 +8,16 @@
 
 namespace Daikon\Tests\DataStructure;
 
+use Daikon\Interop\AssertionFailedException;
 use Daikon\Tests\DataStructure\Fixture\DatetimeList;
 use Daikon\Tests\DataStructure\Fixture\DatetimeMap;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-final class TypedListTraitTest extends TestCase
+final class TypedListTest extends TestCase
 {
     public function testConstructWithoutParams(): void
     {
@@ -27,8 +27,7 @@ final class TypedListTraitTest extends TestCase
     public function testConstructWithParams(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
-        /** @psalm-suppress RedundantCondition */
-        $this->assertInstanceOf(DatetimeList::class, $list);
+        $this->assertCount(2, $list);
     }
 
     public function testConstructWithIndexedParams(): void
@@ -43,9 +42,9 @@ final class TypedListTraitTest extends TestCase
     public function testConstructFailsOnInvalidIndex(): void
     {
         $d0 = new DateTime;
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(12);
-        $this->expectExceptionMessage('Index must be a valid integer');
+        $this->expectExceptionMessage('Index must be a valid integer.');
         new DatetimeList(['a' => $d0]);
     }
 
@@ -89,11 +88,11 @@ final class TypedListTraitTest extends TestCase
     {
         $d1 = new DateTime;
         $list = new DatetimeList([$d1]);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
-            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeList, '.
-            "expected one of [DateTimeInterface] but was given 'stdClass'"
+            "Invalid object type given to 'Daikon\Tests\DataStructure\Fixture\DatetimeList', ".
+            "expected one of [DateTimeInterface] but was given 'stdClass'."
         );
         $list->get(1, new stdClass);
     }
@@ -101,9 +100,9 @@ final class TypedListTraitTest extends TestCase
     public function testGetWithNoDefault(): void
     {
         $list = new DatetimeList;
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(32);
-        $this->expectExceptionMessage("Index 1 not found and no default provided");
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionCode(217);
+        $this->expectExceptionMessage('Index 1 not found and no default provided.');
         $list->get(1);
     }
 
@@ -111,10 +110,10 @@ final class TypedListTraitTest extends TestCase
     {
         $d0 = new DateTime;
         $list = new DatetimeList([$d0]);
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(32);
-        $this->expectExceptionMessage("Index 1 not found");
-        $list->get(1);
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionCode(217);
+        $this->expectExceptionMessage('Index 1 not found and no default provided.');
+        $list->{1};
     }
 
     public function testWith(): void
@@ -133,9 +132,9 @@ final class TypedListTraitTest extends TestCase
         $d0 = new DateTime;
         $d1 = new DateTimeImmutable;
         $list = new DatetimeList([$d0]);
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(32);
-        $this->expectExceptionMessage("Index 1 not found");
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionCode(217);
+        $this->expectExceptionMessage('Index 1 not found.');
         $list->with(1, $d1);
     }
 
@@ -144,11 +143,11 @@ final class TypedListTraitTest extends TestCase
         $d0 = new DateTime;
         $d1 = new stdClass;
         $list = new DatetimeList([$d0]);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
-            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeList, '.
-            "expected one of [DateTimeInterface] but was given 'stdClass'"
+            "Invalid object type given to 'Daikon\Tests\DataStructure\Fixture\DatetimeList', ".
+            "expected one of [DateTimeInterface] but was given 'stdClass'."
         );
         $list->with(0, $d1);
     }
@@ -240,10 +239,10 @@ final class TypedListTraitTest extends TestCase
     {
         $list = new DatetimeList;
         $map = new DatetimeMap;
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(28);
         $this->expectExceptionMessage(
-            'List operation must be on same type as Daikon\Tests\DataStructure\Fixture\DatetimeList'
+            "List operation must be on same type as 'Daikon\Tests\DataStructure\Fixture\DatetimeList'."
         );
         /** @psalm-suppress InvalidArgument */
         $list->append($map);
@@ -266,11 +265,11 @@ final class TypedListTraitTest extends TestCase
     {
         $d0 = new DateTime;
         $list = new DatetimeList([$d0]);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
-            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeList, '.
-            "expected one of [DateTimeInterface] but was given 'stdClass'"
+            "Invalid object type given to 'Daikon\Tests\DataStructure\Fixture\DatetimeList', ".
+            "expected one of [DateTimeInterface] but was given 'stdClass'."
         );
         $list->push(new stdClass);
     }
@@ -296,11 +295,11 @@ final class TypedListTraitTest extends TestCase
         $d0 = new DateTime;
         $d1 = new stdClass;
         $list = new DatetimeList([$d0]);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
-            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeList, '.
-            "expected one of [DateTimeInterface] but was given 'stdClass'"
+            "Invalid object type given to 'Daikon\Tests\DataStructure\Fixture\DatetimeList', ".
+            "expected one of [DateTimeInterface] but was given 'stdClass'."
         );
         $list->unshift($d1);
     }

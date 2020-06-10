@@ -8,8 +8,8 @@
 
 namespace Daikon\DataStructure;
 
-use Assert\Assert;
-use Daikon\Interop\RuntimeException;
+use Daikon\Interop\Assert;
+use Daikon\Interop\Assertion;
 use Ds\Map;
 
 trait TypedMapTrait
@@ -22,11 +22,9 @@ trait TypedMapTrait
     /** @param string[] $validTypes */
     protected function init(iterable $objects, array $validTypes): void
     {
-        if (isset($this->compositeMap)) {
-            throw new RuntimeException('Cannot reinitialize map.');
-        }
-
+        Assertion::false(isset($this->compositeMap), 'Cannot reinitialize map.');
         Assert::thatAll($validTypes, 'Invalid map types.')->string()->notEmpty();
+
         $this->validTypes = $validTypes;
         $this->compositeMap = new Map;
 
@@ -56,7 +54,7 @@ trait TypedMapTrait
         $this->assertInitialized();
         $this->assertValidKey($key);
         if (func_num_args() === 1) {
-            Assert::that($this->has($key))->true("Key '$key' not found and no default provided.");
+            Assertion::satisfy($key, [$this, 'has'], "Key '$key' not found and no default provided.");
             /** @psalm-suppress MixedClone */
             return clone $this->compositeMap->get($key);
         } else {
@@ -82,7 +80,7 @@ trait TypedMapTrait
     public function without(string $key): self
     {
         $this->assertInitialized();
-        Assert::that($this->has($key))->true("Key '$key' not found.");
+        Assertion::satisfy($key, [$this, 'has'], "Key '$key' not found.");
         $copy = clone $this;
         $copy->compositeMap->remove($key);
         return $copy;
@@ -221,18 +219,15 @@ trait TypedMapTrait
     /** @param mixed $map */
     protected function assertValidMap($map): void
     {
-        Assert::that($map)->isInstanceOf(
+        Assertion::isInstanceOf(
+            $map,
             static::class,
-            'Map operation must be on same type as '.static::class
+            sprintf("Map operation must be on same type as '%s'.", static::class)
         );
     }
-
     protected function assertInitialized(): void
     {
-        /** @psalm-suppress TypeDoesNotContainType */
-        if (!isset($this->compositeMap)) {
-            throw new RuntimeException('Map is not initialized.');
-        }
+        Assertion::true(isset($this->compositeMap), 'Map is not initialized.');
     }
 
     /** @param mixed $key */
@@ -246,22 +241,23 @@ trait TypedMapTrait
     {
         Assert::thatAll(
             $this->validTypes,
-            'Object types specified in '.static::class.' must be valid class or interface names.'
+            sprintf("Object types specified in '%s' must be valid class or interface names.", static::class)
         )->string()
         ->notEmpty();
 
-        $objectIsValid = array_reduce(
-            $this->validTypes,
-            fn(bool $carry, string $type): bool => $carry || is_a($object, $type, true),
-            false
+        Assertion::true(
+            array_reduce(
+                $this->validTypes,
+                fn(bool $carry, string $type): bool => $carry || is_a($object, $type, true),
+                false
+            ),
+            sprintf(
+                "Invalid object type given to '%s', expected one of [%s] but was given '%s'.",
+                static::class,
+                implode(', ', $this->validTypes),
+                is_object($object) ? get_class($object) : @gettype($object)
+            )
         );
-
-        Assert::that($objectIsValid)->true(sprintf(
-            "Invalid object type given to %s, expected one of [%s] but was given '%s'.",
-            static::class,
-            implode(', ', $this->validTypes),
-            is_object($object) ? get_class($object) : @gettype($object)
-        ));
     }
 
     public function __get(string $key): ?object
@@ -273,8 +269,7 @@ trait TypedMapTrait
     {
         $this->assertInitialized();
         $this->compositeMap = new Map(array_map(
-            /** @return mixed */
-            fn(object $object) => clone $object,
+            fn(object $object): object => clone $object,
             $this->compositeMap->toArray()
         ));
     }

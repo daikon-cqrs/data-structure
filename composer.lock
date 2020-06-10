@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eec892f94d07f075f51eb6380c3e684b",
+    "content-hash": "dfadb17952a3d47b31e6607483f92ed3",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -74,15 +74,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/interop.git",
-                "reference": "4efb65c3993d172649791a3f5e94227f258efab5"
+                "reference": "8ee2ab64d0415204fe8587115796c241f654b496"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/4efb65c3993d172649791a3f5e94227f258efab5",
-                "reference": "4efb65c3993d172649791a3f5e94227f258efab5",
+                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/8ee2ab64d0415204fe8587115796c241f654b496",
+                "reference": "8ee2ab64d0415204fe8587115796c241f654b496",
                 "shasum": ""
             },
             "require": {
+                "beberlei/assert": "^v3.0",
                 "php": "^7.4"
             },
             "require-dev": {
@@ -103,7 +104,7 @@
             ],
             "description": "Interoperability code used across Daikon-CQRS components.",
             "homepage": "https://github.com/daikon-cqrs/interop",
-            "time": "2020-06-05T17:12:58+00:00"
+            "time": "2020-06-10T16:12:43+00:00"
         },
         {
             "name": "php-ds/php-ds",

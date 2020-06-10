@@ -8,12 +8,12 @@
 
 namespace Daikon\Tests\DataStructure;
 
+use Daikon\Interop\AssertionFailedException;
 use Daikon\Tests\DataStructure\Fixture\DatetimeList;
 use Daikon\Tests\DataStructure\Fixture\DatetimeMap;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -41,18 +41,18 @@ final class TypedMapTest extends TestCase
 
     public function testConstructWithIntegerStringAsKeyThrowsBecausePhp(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(16);
-        $this->expectExceptionMessage('Key must be a valid string');
+        $this->expectExceptionMessage('Key must be a valid string.');
         new DatetimeMap(['1337' => new DateTime]);
     }
 
     public function testConstructFailsOnInvalidIndex(): void
     {
         $d0 = new DateTime;
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(16);
-        $this->expectExceptionMessage('Key must be a valid string');
+        $this->expectExceptionMessage('Key must be a valid string.');
         new DatetimeMap([123 => $d0]);
     }
 
@@ -102,11 +102,11 @@ final class TypedMapTest extends TestCase
     {
         $d1 = new DateTime;
         $map = new DatetimeMap(['a' => $d1]);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
-            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeMap, '.
-            "expected one of [DateTimeInterface] but was given 'stdClass'"
+            "Invalid object type given to 'Daikon\Tests\DataStructure\Fixture\DatetimeMap', ".
+            "expected one of [DateTimeInterface] but was given 'stdClass'."
         );
         $map->get('x', new stdClass);
     }
@@ -114,17 +114,17 @@ final class TypedMapTest extends TestCase
     public function testGetWithNoDefault(): void
     {
         $map = new DateTimeMap;
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(32);
-        $this->expectExceptionMessage("Key 'x' not found and no default provided");
-        $map->get('x');
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionCode(217);
+        $this->expectExceptionMessage("Key 'x' not found and no default provided.");
+        $map->x;
     }
 
     public function testGetThrowsForInternalProperties(): void
     {
         $map = new DatetimeMap(['a' => new Datetime]);
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(32);
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionCode(217);
         $map->validTypes;
     }
 
@@ -146,11 +146,11 @@ final class TypedMapTest extends TestCase
         $d0 = new DateTime;
         $d1 = new stdClass;
         $map = new DatetimeMap(['a' => $d0]);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
-            'Invalid object type given to Daikon\Tests\DataStructure\Fixture\DatetimeMap, '.
-            "expected one of [DateTimeInterface] but was given 'stdClass'"
+            "Invalid object type given to 'Daikon\Tests\DataStructure\Fixture\DatetimeMap', ".
+            "expected one of [DateTimeInterface] but was given 'stdClass'."
         );
         $map->with('b', $d1);
     }
@@ -178,9 +178,9 @@ final class TypedMapTest extends TestCase
         $d0 = new DateTimeImmutable;
         $d1 = new DateTime;
         $map = new DatetimeMap(['a' => $d0, 'b' => $d1]);
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(32);
-        $this->expectExceptionMessage("Key 'c' not found");
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionCode(217);
+        $this->expectExceptionMessage("Key 'c' not found.");
         $map->without('c');
     }
 
@@ -250,10 +250,10 @@ final class TypedMapTest extends TestCase
     {
         $map = new DatetimeMap;
         $list = new DatetimeList;
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(28);
         $this->expectExceptionMessage(
-            'Map operation must be on same type as Daikon\Tests\DataStructure\Fixture\DatetimeMap'
+            "Map operation must be on same type as 'Daikon\Tests\DataStructure\Fixture\DatetimeMap'."
         );
         /** @psalm-suppress InvalidArgument */
         $map->merge($list);
@@ -279,10 +279,10 @@ final class TypedMapTest extends TestCase
     {
         $map = new DatetimeMap;
         $list = new DatetimeList;
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(28);
         $this->expectExceptionMessage(
-            'Map operation must be on same type as Daikon\Tests\DataStructure\Fixture\DatetimeMap'
+            "Map operation must be on same type as 'Daikon\Tests\DataStructure\Fixture\DatetimeMap'."
         );
         /** @psalm-suppress InvalidArgument */
         $map->intersect($list);
@@ -308,10 +308,10 @@ final class TypedMapTest extends TestCase
     {
         $map = new DatetimeMap;
         $list = new DatetimeList;
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionCode(28);
         $this->expectExceptionMessage(
-            'Map operation must be on same type as Daikon\Tests\DataStructure\Fixture\DatetimeMap'
+            "Map operation must be on same type as 'Daikon\Tests\DataStructure\Fixture\DatetimeMap'."
         );
         /** @psalm-suppress InvalidArgument */
         $map->diff($list);
