@@ -18,7 +18,6 @@ trait TypedMapTrait
 
     protected array $validTypes = [];
 
-    /** @param string[] $validTypes */
     protected function init(iterable $objects, array $validTypes): void
     {
         Assertion::false(isset($this->compositeMap), 'Cannot reinitialize map.');
@@ -30,7 +29,6 @@ trait TypedMapTrait
         foreach ($objects as $key => $object) {
             $this->assertValidKey($key);
             $this->assertValidType($object);
-            /** @psalm-suppress MixedClone */
             $this->compositeMap->put($key, clone $object);
         }
     }
@@ -54,18 +52,16 @@ trait TypedMapTrait
         $this->assertValidKey($key);
         if (func_num_args() === 1) {
             Assertion::satisfy($key, [$this, 'has'], "Key '$key' not found and no default provided.");
-            /** @psalm-suppress MixedClone */
             return clone $this->compositeMap->get($key);
-        } else {
-            if (!is_null($default)) {
-                $this->assertValidType($default);
-            }
-            $object = $this->compositeMap->get($key, $default);
-            /** @psalm-suppress MixedClone */
-            return is_null($object) ? null : clone $object;
         }
+        if (!is_null($default)) {
+            $this->assertValidType($default);
+        }
+        $object = $this->compositeMap->get($key, $default);
+        return is_null($object) ? null : clone $object;
     }
 
+    /** @return static */
     public function with(string $key, object $object): self
     {
         $this->assertInitialized();
@@ -76,6 +72,7 @@ trait TypedMapTrait
         return $copy;
     }
 
+    /** @return static */
     public function without(string $key): self
     {
         $this->assertInitialized();
@@ -100,20 +97,12 @@ trait TypedMapTrait
     public function first(): object
     {
         $this->assertInitialized();
-        /**
-         * @psalm-suppress MissingPropertyType
-         * @psalm-suppress MixedClone
-         */
         return clone $this->compositeMap->first()->value;
     }
 
     public function last(): object
     {
         $this->assertInitialized();
-        /**
-         * @psalm-suppress MissingPropertyType
-         * @psalm-suppress MixedClone
-         */
         return clone $this->compositeMap->last()->value;
     }
 
@@ -123,7 +112,10 @@ trait TypedMapTrait
         return $this->compositeMap->isEmpty();
     }
 
-    /** @param static $map */
+    /**
+     * @param static $map
+     * @return static
+     */
     public function merge($map): self
     {
         $this->assertInitialized();
@@ -133,7 +125,10 @@ trait TypedMapTrait
         return $copy;
     }
 
-    /** @param static $map */
+    /**
+     * @param static $map
+     * @return static
+     */
     public function intersect($map): self
     {
         $this->assertInitialized();
@@ -141,7 +136,10 @@ trait TypedMapTrait
         return $this->filter(fn(string $key): bool => $map->has($key));
     }
 
-    /** @param static $map */
+    /**
+     * @param static $map
+     * @return static
+     */
     public function diff($map): self
     {
         $this->assertInitialized();
@@ -149,6 +147,7 @@ trait TypedMapTrait
         return $this->filter(fn(string $key): bool => !$map->has($key));
     }
 
+    /** @return static */
     public function filter(callable $predicate): self
     {
         $this->assertInitialized();
@@ -168,6 +167,7 @@ trait TypedMapTrait
         return false;
     }
 
+    /** @return static */
     public function map(callable $predicate): self
     {
         $this->assertInitialized();
@@ -176,10 +176,6 @@ trait TypedMapTrait
         return $copy;
     }
 
-    /**
-     * @param mixed $initial
-     * @return mixed
-     */
     public function reduce(callable $predicate, $initial = null)
     {
         $this->assertInitialized();

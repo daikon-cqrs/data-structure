@@ -54,6 +54,7 @@ trait MapTrait
         }
     }
 
+    /** @return static */
     public function with(string $key, $value): self
     {
         $this->assertInitialized();
@@ -63,6 +64,7 @@ trait MapTrait
         return $copy;
     }
 
+    /** @return static */
     public function without(string $key): self
     {
         $this->assertInitialized();
@@ -92,11 +94,11 @@ trait MapTrait
         return $this->compositeMap->isEmpty();
     }
 
-    /** @param static $map */
-    public function equals($map): bool
+    /** @param static $comparator */
+    public function equals($comparator): bool
     {
-        $this->assertValidMap($map);
-        return $this->unwrap() === $map->unwrap();
+        $this->assertValidMap($comparator);
+        return $this->unwrap() === $comparator->unwrap();
     }
 
     public function count(): int

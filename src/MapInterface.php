@@ -38,7 +38,7 @@ interface MapInterface extends IteratorAggregate, Countable
     public function isEmpty(): bool;
 
     /** @psalm-suppress MissingParamType */
-    public function equals($map): bool;
+    public function equals($comparator): bool;
 
     public function unwrap(): array;
 

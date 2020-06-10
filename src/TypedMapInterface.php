@@ -49,6 +49,7 @@ interface TypedMapInterface extends IteratorAggregate, Countable
     public function search(callable $predicate);
 
     public function map(callable $predicate): self;
+
     /**
      * @param mixed $initial
      * @return mixed

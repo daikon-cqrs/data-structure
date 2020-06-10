@@ -19,7 +19,6 @@ trait TypedListTrait
 
     protected array $validTypes = [];
 
-    /** @param string[] $validTypes */
     protected function init(iterable $objects, array $validTypes): void
     {
         Assertion::false(isset($this->compositeVector), 'Cannot reinitialize map.');
@@ -31,7 +30,6 @@ trait TypedListTrait
         foreach ($objects as $index => $object) {
             $this->assertValidIndex($index);
             $this->assertValidType($object);
-            /** @psalm-suppress MixedClone */
             $this->compositeVector->push(clone $object);
         }
     }
@@ -52,20 +50,18 @@ trait TypedListTrait
         $this->assertInitialized();
         if (func_num_args() === 1) {
             Assertion::satisfy($index, [$this, 'has'], "Index $index not found and no default provided.");
-            /** @psalm-suppress MixedClone */
             return clone $this->compositeVector->get($index);
-        } else {
-            if (!is_null($default)) {
-                $this->assertValidType($default);
-            }
-            $object = $this->has($index)
-                ? $this->compositeVector->get($index)
-                : $default;
-            /** @psalm-suppress MixedClone */
-            return is_null($object) ? null : clone $object;
         }
+        if (!is_null($default)) {
+            $this->assertValidType($default);
+        }
+        $object = $this->has($index)
+            ? $this->compositeVector->get($index)
+            : $default;
+        return is_null($object) ? null : clone $object;
     }
 
+    /** @return static */
     public function with(int $index, object $object): self
     {
         $this->assertInitialized();
@@ -76,6 +72,7 @@ trait TypedListTrait
         return $copy;
     }
 
+    /** @return static */
     public function without(int $index): self
     {
         $this->assertInitialized();
@@ -99,14 +96,12 @@ trait TypedListTrait
     public function first(): object
     {
         $this->assertInitialized();
-        /** @psalm-suppress MixedClone */
         return clone $this->compositeVector->first();
     }
 
     public function last(): object
     {
         $this->assertInitialized();
-        /** @psalm-suppress MixedClone */
         return clone $this->compositeVector->last();
     }
 
@@ -116,17 +111,21 @@ trait TypedListTrait
         return $this->compositeVector->isEmpty();
     }
 
-    /** @param static $list */
+    /**
+     * @param static $list
+     * @return static
+     */
     public function append($list): self
     {
         $this->assertInitialized();
         $this->assertValidList($list);
         $copy = clone $this;
-        /** @psalm-suppress PropertyTypeCoercion */
+        /** @var iterable $list */
         $copy->compositeVector = $copy->compositeVector->merge($list);
         return $copy;
     }
 
+    /** @return static */
     public function push(object $object): self
     {
         $this->assertInitialized();
@@ -136,6 +135,7 @@ trait TypedListTrait
         return $copy;
     }
 
+    /** @return static */
     public function unshift(object $object): self
     {
         $this->assertInitialized();
@@ -145,6 +145,7 @@ trait TypedListTrait
         return $copy;
     }
 
+    /** @return static */
     public function reverse(): self
     {
         $this->assertInitialized();
@@ -153,6 +154,7 @@ trait TypedListTrait
         return $copy;
     }
 
+    /** @return static */
     public function replace(callable $predicate, object $replacement): self
     {
         $this->assertInitialized();
@@ -165,6 +167,7 @@ trait TypedListTrait
         return new static($objects);
     }
 
+    /** @return static */
     public function sort(callable $predicate): self
     {
         $this->assertInitialized();
@@ -173,11 +176,11 @@ trait TypedListTrait
         return $copy;
     }
 
+    /** @return static */
     public function filter(callable $predicate): self
     {
         $this->assertInitialized();
         $copy = clone $this;
-        /** @psalm-suppress PropertyTypeCoercion */
         $copy->compositeVector = $copy->compositeVector->filter($predicate);
         return $copy;
     }
@@ -193,6 +196,7 @@ trait TypedListTrait
         return false;
     }
 
+    /** @return static */
     public function map(callable $predicate): self
     {
         $this->assertInitialized();
