@@ -188,7 +188,7 @@ trait TypedListTrait
     {
         $this->assertInitialized();
         foreach ($this as $index => $object) {
-            if (call_user_func($predicate, $object) === true) {
+            if ($predicate($object) === true) {
                 return $index;
             }
         }

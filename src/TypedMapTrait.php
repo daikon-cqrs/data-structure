@@ -162,7 +162,7 @@ trait TypedMapTrait
     {
         $this->assertInitialized();
         foreach ($this as $key => $object) {
-            if (call_user_func($predicate, $object) === true) {
+            if ($predicate($object) === true) {
                 return $key;
             }
         }

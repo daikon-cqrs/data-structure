@@ -74,12 +74,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/interop.git",
-                "reference": "8ee2ab64d0415204fe8587115796c241f654b496"
+                "reference": "b7e146b17758ae31a625507728ab1031e99b8e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/8ee2ab64d0415204fe8587115796c241f654b496",
-                "reference": "8ee2ab64d0415204fe8587115796c241f654b496",
+                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/b7e146b17758ae31a625507728ab1031e99b8e99",
+                "reference": "b7e146b17758ae31a625507728ab1031e99b8e99",
                 "shasum": ""
             },
             "require": {
@@ -104,7 +104,7 @@
             ],
             "description": "Interoperability code used across Daikon-CQRS components.",
             "homepage": "https://github.com/daikon-cqrs/interop",
-            "time": "2020-06-10T16:12:43+00:00"
+            "time": "2020-06-10T17:16:10+00:00"
         },
         {
             "name": "php-ds/php-ds",
