@@ -14,6 +14,8 @@ use IteratorAggregate;
 
 interface TypedListInterface extends IteratorAggregate, Countable
 {
+    public function empty(): self;
+
     public function has(int $index): bool;
 
     /** @param null|object $default */

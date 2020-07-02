@@ -62,6 +62,15 @@ final class TypedMapTest extends TestCase
         $this->assertSame(['a', 'b'], $map->keys());
     }
 
+    public function testEmpty(): void
+    {
+        $map = new DatetimeMap(['a' => new DateTime, 'b' => new DateTimeImmutable]);
+        $empty = $map->empty();
+        $this->assertNotSame($map, $empty);
+        $this->assertCount(0, $empty);
+        $this->assertTrue($empty->isEmpty());
+    }
+
     public function testHas(): void
     {
         $map = new DatetimeMap(['a' => new DateTime, 'b' => new DateTimeImmutable]);

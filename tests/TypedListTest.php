@@ -48,6 +48,15 @@ final class TypedListTest extends TestCase
         new DatetimeList(['a' => $d0]);
     }
 
+    public function testEmpty(): void
+    {
+        $list = new DatetimeList([new DateTime, new DateTimeImmutable]);
+        $empty = $list->empty();
+        $this->assertNotSame($list, $empty);
+        $this->assertCount(0, $empty);
+        $this->assertTrue($empty->isEmpty());
+    }
+
     public function testHas(): void
     {
         $list = new DatetimeList([new DateTime, new DateTimeImmutable]);

@@ -34,6 +34,12 @@ trait TypedListTrait
         }
     }
 
+    public function empty(): self
+    {
+        $this->assertInitialized();
+        return new static;
+    }
+
     public function has(int $index): bool
     {
         $this->assertInitialized();

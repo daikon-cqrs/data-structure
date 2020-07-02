@@ -33,6 +33,12 @@ trait TypedMapTrait
         }
     }
 
+    public function empty(): self
+    {
+        $this->assertInitialized();
+        return new static;
+    }
+
     public function keys(): array
     {
         $this->assertInitialized();

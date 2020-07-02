@@ -28,6 +28,12 @@ trait MapTrait
         $this->compositeMap = new Map($values);
     }
 
+    public function empty(): self
+    {
+        $this->assertInitialized();
+        return new static;
+    }
+
     public function keys(): array
     {
         $this->assertInitialized();

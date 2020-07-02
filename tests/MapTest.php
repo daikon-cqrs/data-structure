@@ -52,6 +52,15 @@ final class MapTest extends TestCase
         $this->assertSame(['k0', 'k1'], $map->keys());
     }
 
+    public function testEmpty(): void
+    {
+        $map = new PlainMap(['k0' => 'v0', 'k1' => 1]);
+        $empty = $map->empty();
+        $this->assertNotSame($map, $empty);
+        $this->assertCount(0, $empty);
+        $this->assertTrue($empty->isEmpty());
+    }
+
     public function testHas(): void
     {
         $map = new PlainMap(['k0' => 'v0', 'k1' => 'v1']);

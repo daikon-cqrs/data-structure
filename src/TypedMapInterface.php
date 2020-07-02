@@ -16,6 +16,8 @@ interface TypedMapInterface extends IteratorAggregate, Countable
 {
     public function keys(): array;
 
+    public function empty(): self;
+
     public function has(string $key): bool;
 
     /** @param null|object $default */
