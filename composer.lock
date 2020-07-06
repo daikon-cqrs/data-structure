@@ -74,16 +74,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/interop.git",
-                "reference": "12496dfaccf079ce09c1484149c3cb7a3ed0df83"
+                "reference": "1d459ebad4062dfc96e27b13bb24aa046eaabdd0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/12496dfaccf079ce09c1484149c3cb7a3ed0df83",
-                "reference": "12496dfaccf079ce09c1484149c3cb7a3ed0df83",
+                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/1d459ebad4062dfc96e27b13bb24aa046eaabdd0",
+                "reference": "1d459ebad4062dfc96e27b13bb24aa046eaabdd0",
                 "shasum": ""
             },
             "require": {
-                "beberlei/assert": "^v3.0",
+                "beberlei/assert": "^3.0",
                 "php": "^7.4"
             },
             "require-dev": {
@@ -104,7 +104,7 @@
             ],
             "description": "Interoperability code used across Daikon-CQRS components.",
             "homepage": "https://github.com/daikon-cqrs/interop",
-            "time": "2020-06-13T18:56:24+00:00"
+            "time": "2020-07-05T18:12:30+00:00"
         },
         {
             "name": "php-ds/php-ds",
@@ -3455,16 +3455,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "3.12.1",
+            "version": "3.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "9b860214d58c48b5cbe99bdb17914d0eb723c9cd"
+                "reference": "7c7ebd068f8acaba211d4a2c707c4ba90874fa26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/9b860214d58c48b5cbe99bdb17914d0eb723c9cd",
-                "reference": "9b860214d58c48b5cbe99bdb17914d0eb723c9cd",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/7c7ebd068f8acaba211d4a2c707c4ba90874fa26",
+                "reference": "7c7ebd068f8acaba211d4a2c707c4ba90874fa26",
                 "shasum": ""
             },
             "require": {
@@ -3548,7 +3548,7 @@
                 "inspection",
                 "php"
             ],
-            "time": "2020-06-23T00:24:34+00:00"
+            "time": "2020-07-03T16:59:07+00:00"
         },
         {
             "name": "webmozart/assert",
