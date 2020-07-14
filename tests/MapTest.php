@@ -8,7 +8,7 @@
 
 namespace Daikon\Tests\DataStructure;
 
-use Daikon\Interop\AssertionFailedException;
+use Daikon\Interop\InvalidArgumentException;
 use Daikon\Tests\DataStructure\Fixture\PlainMap;
 use DateTime;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +29,7 @@ final class MapTest extends TestCase
 
     public function testConstructWithObjects(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
             "Invalid value type given to 'Daikon\Tests\DataStructure\Fixture\PlainMap', ".
@@ -40,7 +40,7 @@ final class MapTest extends TestCase
 
     public function testConstructWithIntegerKey(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(16);
         $this->expectExceptionMessage('Key must be a valid string.');
         new PlainMap([0 => 'v0']);
@@ -92,7 +92,7 @@ final class MapTest extends TestCase
     public function testGetWithInvalidDefault(): void
     {
         $map = new PlainMap(['k0' => 'v0']);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
             "Invalid value type given to 'Daikon\Tests\DataStructure\Fixture\PlainMap', ".
@@ -104,7 +104,7 @@ final class MapTest extends TestCase
     public function testGetWithNoDefault(): void
     {
         $map = new PlainMap(['k0' => 'v0']);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(217);
         $this->expectExceptionMessage("Key 'x' not found and no default provided.");
         $map->x;
@@ -113,7 +113,7 @@ final class MapTest extends TestCase
     public function testGetThrowsForInternalProperties(): void
     {
         $map = new PlainMap(['k0' => 'v1']);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(217);
         $map->validTypes;
     }
@@ -130,7 +130,7 @@ final class MapTest extends TestCase
     public function testWithFailsOnUnacceptableType(): void
     {
         $map = new PlainMap(['k0' => 'v0']);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(32);
         $this->expectExceptionMessage(
             "Invalid value type given to 'Daikon\Tests\DataStructure\Fixture\PlainMap', ".
@@ -154,7 +154,7 @@ final class MapTest extends TestCase
     public function testWithoutWithNotExistentKey(): void
     {
         $map = new PlainMap(['k0' => 'v0', 'k1' => 'v1']);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(217);
         $this->expectExceptionMessage("Key 'k2' not found.");
         $map->without('k2');
