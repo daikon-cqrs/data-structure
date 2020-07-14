@@ -28,6 +28,7 @@ abstract class Map implements MapInterface
         $this->compositeMap = new DsMap($values);
     }
 
+    /** @return static */
     public function empty(): self
     {
         $this->assertInitialized();
@@ -60,6 +61,7 @@ abstract class Map implements MapInterface
         }
     }
 
+    /** @return static */
     public function with(string $key, $value): self
     {
         $this->assertInitialized();
@@ -69,6 +71,7 @@ abstract class Map implements MapInterface
         return $copy;
     }
 
+    /** @return static */
     public function without(string $key): self
     {
         $this->assertInitialized();
