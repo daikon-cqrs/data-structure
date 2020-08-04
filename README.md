@@ -5,7 +5,7 @@
 ![Packagist License](https://img.shields.io/packagist/l/daikon/data-structure)
 
 [![Build Status](https://travis-ci.com/daikon-cqrs/data-structure.svg?branch=master)](https://travis-ci.com/daikon-cqrs/data-structure)
-[![Code Coverage](https://scrutinizer-ci.com/g/daikon-cqrs/data-structure/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/data-structure/?branch=master)
+[![Code Coverage](https://img.shields.io/codecov/c/github/daikon-cqrs/data-structure)](https://codecov.io/gh/daikon-cqrs/data-structure)
 [![Type Coverage](https://shepherd.dev/github/daikon-cqrs/data-structure/coverage.svg)](https://shepherd.dev/github/daikon-cqrs/data-structure)
 [![Libraries.io dependency status](https://img.shields.io/librariesio/github/daikon-cqrs/data-structure)](https://libraries.io/github/daikon-cqrs/data-structure)
 [![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/daikon-cqrs/data-structure/master)](https://scrutinizer-ci.com/g/daikon-cqrs/data-structure/?branch=master)
