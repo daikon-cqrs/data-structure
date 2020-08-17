@@ -338,7 +338,8 @@ final class TypedListTest extends TestCase
     {
         $d0 = new DateTimeImmutable('@1234567');
         $d1 = new DateTimeImmutable('@7654321');
-        $list = new DatetimeList([$d0]);
+        $d2 = new DateTimeImmutable('@3333333');
+        $list = new DatetimeList([$d0, $d2]);
         $replacedList = $list->replace(
             fn(DateTimeInterface $object): bool => $object->getTimestamp() === 1234567,
             $d1
@@ -346,7 +347,9 @@ final class TypedListTest extends TestCase
         $this->assertNotSame($list, $replacedList);
         $this->assertNotSame($d1, $replacedList[0]);
         $this->assertEquals($d1, $replacedList[0]);
-        $this->assertCount(1, $replacedList);
+        $this->assertNotSame($d2, $replacedList[1]);
+        $this->assertEquals($d2, $replacedList[1]);
+        $this->assertCount(2, $replacedList);
     }
 
     public function testSort(): void

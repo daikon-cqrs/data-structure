@@ -39,7 +39,9 @@ abstract class TypedList implements TypedListInterface
     public function empty(): self
     {
         $this->assertInitialized();
-        return new static;
+        $copy = clone $this;
+        $copy->compositeVector->clear();
+        return $copy;
     }
 
     public function has(int $index): bool
@@ -167,12 +169,11 @@ abstract class TypedList implements TypedListInterface
     {
         $this->assertInitialized();
         $this->assertValidType($replacement);
-        $objects = [];
+        $copy = $this->empty();
         foreach ($this as $object) {
-            $objects[] = $predicate($object) === true ? $replacement : $object;
+            $copy = $copy->push($predicate($object) === true ? $replacement : $object);
         }
-        /** @psalm-suppress TooManyArguments */
-        return new static($objects);
+        return $copy;
     }
 
     /** @return static */

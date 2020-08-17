@@ -38,7 +38,9 @@ abstract class TypedMap implements TypedMapInterface
     public function empty(): self
     {
         $this->assertInitialized();
-        return new static;
+        $copy = clone $this;
+        $copy->compositeMap->clear();
+        return $copy;
     }
 
     public function keys(): array
