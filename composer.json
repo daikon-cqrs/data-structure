@@ -1,7 +1,7 @@
 {
     "name": "daikon/data-structure",
     "type": "library",
-    "description": "Immutable data-structure traits based on php/ds.",
+    "description": "Immutable data structures based on php/ds.",
     "keywords": [ "immutable", "list", "map", "vector", "data-structure" ],
     "homepage": "https://github.com/daikon-cqrs/data-structure",
     "license": "MPL-2.0",

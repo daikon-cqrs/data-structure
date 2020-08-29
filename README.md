@@ -1,14 +1,15 @@
 # Data Structure
 
-![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/daikon/data-structure)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/daikon-cqrs/data-structure)
-![Packagist License](https://img.shields.io/packagist/l/daikon/data-structure)
+![PHP Version Support](https://badgen.net/packagist/php/daikon/data-structure?color=blue)
+[![Lines of Code](https://badgen.net/codeclimate/loc/daikon-cqrs/data-structure)](https://codeclimate.com/github/daikon-cqrs/data-structure/code?sort=-loc)
+[![Packagist](https://badgen.net/packagist/name/daikon/data-structure?color=blue)](https://packagist.org/packages/daikon/data-structure)
+[![License](https://badgen.net/github/license/daikon-cqrs/data-structure)](https://github.com/daikon-cqrs/data-structure/blob/master/LICENSE)
 
-[![Build Status](https://travis-ci.com/daikon-cqrs/data-structure.svg?branch=master)](https://travis-ci.com/daikon-cqrs/data-structure)
-[![Code Coverage](https://img.shields.io/codecov/c/github/daikon-cqrs/data-structure)](https://codecov.io/gh/daikon-cqrs/data-structure)
+[![Build Status](https://badgen.net/travis/daikon-cqrs/data-structure?label=build)](https://travis-ci.com/daikon-cqrs/data-structure)
+[![Code Coverage](https://badgen.net/codecov/c/github/daikon-cqrs/data-structure)](https://codecov.io/gh/daikon-cqrs/data-structure)
 [![Type Coverage](https://shepherd.dev/github/daikon-cqrs/data-structure/coverage.svg)](https://shepherd.dev/github/daikon-cqrs/data-structure)
-[![Libraries.io dependency status](https://img.shields.io/librariesio/github/daikon-cqrs/data-structure)](https://libraries.io/github/daikon-cqrs/data-structure)
-[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/daikon-cqrs/data-structure/master)](https://scrutinizer-ci.com/g/daikon-cqrs/data-structure/?branch=master)
-[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/daikon-cqrs/data-structure)](https://codeclimate.com/github/daikon-cqrs/data-structure/maintainability)
+[![Code Quality](https://img.shields.io/scrutinizer/quality/g/daikon-cqrs/data-structure/master)](https://scrutinizer-ci.com/g/daikon-cqrs/data-structure/?branch=master)
+[![Code Maintainability](https://badgen.net/codeclimate/maintainability/daikon-cqrs/data-structure)](https://codeclimate.com/github/daikon-cqrs/data-structure)
+[![Dependabot](https://badgen.net/github/dependabot/daikon-cqrs/data-structure)](https://github.com/daikon-cqrs/data-structure/network/updates)
 
-Immutable data-structure traits based on php/ds.
+Immutable data structures based on php/ds.
