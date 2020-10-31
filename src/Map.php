@@ -25,6 +25,7 @@ abstract class Map implements MapInterface
             $this->assertValidType($value);
         }
 
+        /** @var \Traversable $values */
         $this->compositeMap = new DsMap($values);
     }
 

@@ -58,6 +58,7 @@
         <MoreSpecificImplementedParamType errorLevel="info" />
         <MoreSpecificReturnType errorLevel="suppress" />
         <LessSpecificReturnStatement errorLevel="suppress" />
+        <ArgumentTypeCoercion errorLevel="info" />
         <PropertyTypeCoercion errorLevel="info" />
 
         <PossiblyFalseArgument errorLevel="info" />

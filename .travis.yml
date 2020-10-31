@@ -11,7 +11,6 @@ env:
     CC_TEST_REPORTER_ID=e17c572b0396e6e395b1afe3c2c028e46c8dda20a6f50ade90441200a0b7cd6e
 
 install:
-  - travis_retry pecl install ds
   - curl -s http://getcomposer.org/installer | php -- --filename=composer
   - chmod +x composer
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > cc-test-reporter
