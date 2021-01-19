@@ -11,6 +11,7 @@ namespace Daikon\DataStructure;
 use Daikon\Interop\Assert;
 use Daikon\Interop\Assertion;
 use Ds\Map as DsMap;
+use Traversable;
 
 abstract class Map implements MapInterface
 {
@@ -25,7 +26,7 @@ abstract class Map implements MapInterface
             $this->assertValidType($value);
         }
 
-        /** @var \Traversable $values */
+        /** @var Traversable $values */
         $this->compositeMap = new DsMap($values);
     }
 
@@ -129,6 +130,7 @@ abstract class Map implements MapInterface
         return $this->compositeMap;
     }
 
+    /** @psalm-suppress RedundantPropertyInitializationCheck */
     protected function assertInitialized(): void
     {
         Assertion::true(isset($this->compositeMap), 'Map is not initialized.');

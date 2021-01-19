@@ -250,6 +250,7 @@ abstract class TypedList implements TypedListInterface
         return $copy->compositeVector;
     }
 
+    /** @psalm-suppress RedundantPropertyInitializationCheck */
     protected function assertInitialized(): void
     {
         Assertion::true(isset($this->compositeVector), 'List is not initialized.');

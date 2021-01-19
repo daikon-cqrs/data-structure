@@ -230,6 +230,8 @@ abstract class TypedMap implements TypedMapInterface
             sprintf("Map operation must be on same type as '%s'.", static::class)
         );
     }
+
+    /** @psalm-suppress RedundantPropertyInitializationCheck */
     protected function assertInitialized(): void
     {
         Assertion::true(isset($this->compositeMap), 'Map is not initialized.');
