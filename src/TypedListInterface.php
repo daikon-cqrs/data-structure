@@ -66,5 +66,5 @@ interface TypedListInterface extends IteratorAggregate, Countable
 
     public function getIterator(): Vector;
 
-    public function __get(int $index): ?object;
+    public function __get(string $index): ?object;
 }

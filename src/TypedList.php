@@ -296,9 +296,9 @@ abstract class TypedList implements TypedListInterface
         );
     }
 
-    public function __get(int $index): ?object
+    public function __get(string $index): ?object
     {
-        return $this->get($index);
+        return $this->get((int)$index);
     }
 
     public function __clone()

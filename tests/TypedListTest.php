@@ -363,7 +363,7 @@ final class TypedListTest extends TestCase
         $this->assertNotSame($d1, $unwrappedList[1]);
         $this->assertEquals($d1, $unwrappedList[1]);
         $sortedList = $list->sort(
-            fn(DateTimeInterface $f0, DateTimeInterface $f1): bool => $f0 > $f1
+            fn(DateTimeInterface $f0, DateTimeInterface $f1): int => $f0 > $f1 ? 1 : 0
         )->unwrap();
         $this->assertNotSame($unwrappedList[1], $sortedList[0]);
         $this->assertEquals($unwrappedList[1], $sortedList[0]);
