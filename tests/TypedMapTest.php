@@ -195,7 +195,7 @@ final class TypedMapTest extends TestCase
 
     public function testFind(): void
     {
-        $d1 = new DateTimeImmutable;
+        $d1 = new DateTimeImmutable('-1 minute');
         $map = new DatetimeMap(['a' => new DateTimeImmutable, 'b' => $d1]);
         $unwrappedMap = $map->unwrap();
         $this->assertNotSame($d1, $unwrappedMap['b']);
